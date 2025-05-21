@@ -1,0 +1,20 @@
+{
+    "compilerOptions": {
+        "target": "ESNext",
+        "module": "ESNext",
+        "moduleResolution": "Node",
+        "strict": true,
+        "jsx": "preserve",
+        "esModuleInterop": true,
+        "skipLibCheck": true,
+        "forceConsistentCasingInFileNames": true,
+        "baseUrl": "./",
+        "paths": {
+            "@/*": ["./*"]
+        }
+    },
+    "include": [
+        "./**/*",
+        "../../node_modules/.pnpm/vitest@3.1.4_@types+node@22.15.21_jiti@2.4.2_jsdom@26.1.0_lightningcss@1.30.1_sass@1.89.0_yaml@2.8.0/node_modules/vitest/globals.d.ts"
+    ]
+}

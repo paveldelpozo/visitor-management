@@ -3,20 +3,47 @@
     "type": "module",
     "scripts": {
         "build": "vite build",
-        "dev": "vite"
+        "dev": "vite",
+        "serve": "php artisan serve",
+        "vite": "vite",
+        "dev:full": "npm-run-all --parallel serve vite",
+        "test": "vitest run",
+        "test:unit": "vitest run",
+        "test:backend": "php artisan test",
+        "test:all": "npm run test:backend && npm run test:unit"
     },
     "devDependencies": {
         "@inertiajs/vue3": "^2.0.0",
+        "@laravel/echo-vue": "^2.1.4",
         "@tailwindcss/forms": "^0.5.3",
         "@tailwindcss/vite": "^4.0.0",
-        "@vitejs/plugin-vue": "^5.0.0",
+        "@types/node": "^22.15.21",
+        "@vitejs/plugin-vue": "^5.2.4",
         "autoprefixer": "^10.4.12",
         "axios": "^1.8.2",
         "concurrently": "^9.0.1",
+        "jsdom": "^26.1.0",
+        "laravel-echo": "^2.1.4",
         "laravel-vite-plugin": "^1.2.0",
+        "npm-run-all": "^4.1.5",
         "postcss": "^8.4.31",
+        "pusher-js": "^8.4.0",
         "tailwindcss": "^3.2.1",
+        "typescript": "^5.8.3",
         "vite": "^6.2.4",
-        "vue": "^3.4.0"
+        "vitest": "^3.1.4",
+        "vue": "^3.4.0",
+        "vue-test-utils": "1.0.0-beta.11"
+    },
+    "dependencies": {
+        "@mdi/font": "^7.4.47",
+        "@pusher/push-notifications": "^0.1.0",
+        "@vue/test-utils": "^2.4.6",
+        "axios-retry": "^4.5.0",
+        "matchers": "link:@testing-library/jest-dom/matchers",
+        "sass": "^1.89.0",
+        "vue-router": "^4.5.1",
+        "vuetify": "^3.8.6",
+        "ziggy-js": "^2.5.3"
     }
 }

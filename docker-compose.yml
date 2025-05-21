@@ -1,0 +1,30 @@
+version: '3.8'
+services:
+    app:
+        build:
+            context: .
+        ports:
+            - "8000:8000"
+        volumes:
+            - .:/var/www
+        depends_on:
+            - mysql
+        environment:
+            DB_HOST=mysql
+            DB_PORT=3306
+            DB_DATABASE=laravel
+            DB_USERNAME=root
+            DB_PASSWORD=secret
+
+    mysql:
+        image: mysql:8
+        ports:
+            - "3306:3306"
+        environment:
+            MYSQL_ROOT_PASSWORD: secret
+            MYSQL_DATABASE: laravel
+
+    pusher:
+        image: quay.io/beyondcode/laravel-websockets
+        ports:
+            - "6001:6001"
