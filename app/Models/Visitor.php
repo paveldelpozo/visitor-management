@@ -15,6 +15,18 @@ class Visitor extends Model
         'headphones',
     ];
 
+    public function scopeSearch($query, string $value)
+    {
+        return $query->where(function ($query) use ($value) {
+            $query->where('name', 'like', "%$value%")
+                ->orWhere('surname', 'like', "%$value%")
+                ->orWhere('company', 'like', "%$value%")
+                ->orWhere('identity_id', 'like', "%$value%")
+                ->orWhere('phone', 'like', "%$value%")
+                ->orWhere('email', 'like', "%$value%");
+        });
+    }
+
     public function scopeSearchName($query, string $value)
     {
         return $query->where('name', 'like', "%$value%");
@@ -45,7 +57,7 @@ class Visitor extends Model
         return $query->where('email', 'like', "%$value%");
     }
 
-    public function logs()
+    public function logs(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(VisitorLog::class);
     }

@@ -9,32 +9,37 @@ use App\Http\Requests\VisitorStoreRequest;
 use App\Http\Requests\VisitorUpdateRequest;
 use App\Models\Visitor;
 use App\Models\VisitorLog;
+use Illuminate\Http\Request;
+use JetBrains\PhpStorm\NoReturn;
 
 class VisitorController extends Controller
 {
     public function search(VisitorSearchRequest $request): \Illuminate\Http\JsonResponse
     {
         $query = Visitor::query();
-        foreach ($request->filters() as $field => $value) {
-            $query->{"search" . ucfirst($field)}($value);
-        }
 
-        $results = $query->get();
+        $request->get('search') && $query->search($request->get('search'));
 
-        if ($results->count() === 0) {
+//        foreach ($request->filters() as $field => $value) {
+//            $query->{"search" . ucfirst($field)}($value);
+//        }
+
+        $results = $query;
+
+        if ($results->get()->count() === 0) {
             return response()->json(['status' => 'not_found']);
         }
 
-        if ($results->count() === 1) {
+        if ($results->get()->count() === 1) {
             return response()->json([
                 'status' => 'single',
-                'visitor' => $results->first()
+                'visitor' => $results->get()->first()
             ]);
         }
 
         return response()->json([
             'status' => 'multiple',
-            'visitors' => $results
+            'visitors' => $results->latest()->limit(10)->get()
         ]);
     }
 
@@ -52,7 +57,18 @@ class VisitorController extends Controller
         return response()->json($visitor);
     }
 
-    public function update(VisitorUpdateRequest $request, Visitor $visitor)
+    public function show($id): \Illuminate\Http\JsonResponse
+    {
+        $visitor = Visitor::find($id);
+
+        if (!$visitor) {
+            return response()->json(['message' => 'Visitor not found'], 404);
+        }
+
+        return response()->json($visitor);
+    }
+
+    public function update(VisitorUpdateRequest $request, Visitor $visitor): \Illuminate\Http\JsonResponse
     {
         $original = $visitor->headphones;
         $visitor->update($request->validated());
@@ -69,16 +85,32 @@ class VisitorController extends Controller
         return response()->json($visitor);
     }
 
-    public function logs(Request $request, Visitor $visitor)
+    public function destroy($id): \Illuminate\Http\JsonResponse
     {
-        $logs = $visitor->logs()->latest()
-            ->when($request->input('search'), fn($q, $search) => $q->where('action', 'like', "%$search%"))
-            ->paginate(10);
+        $visitor = Visitor::find($id);
 
-        return response()->json($logs);
+        if (! $visitor) {
+            return response()->json(['message' => 'Visitor not found'], 404);
+        }
+
+        $visitor->delete();
+
+        return response()->json(['message' => 'Visitor deleted successfully']);
     }
 
-    public function export()
+    public function logs(Request $request, Visitor $visitor): \Illuminate\Http\JsonResponse
+    {
+        $logs = $visitor->logs()->with(['user', 'visitor']);
+
+//        if ($request->has('search'))
+//            $logs->when($request->input('search'), fn($q, $search) => $q->where('action', 'like', "%$search%"));
+//
+//        dd($logs->toSql(), $logs->getBindings());
+
+        return response()->json($logs->latest()->paginate(10));
+    }
+
+    #[NoReturn] public function export(): void
     {
         $csv = Visitor::all()->map(fn($v) => [
             'Nombre' => $v->name,

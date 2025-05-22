@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-// use App\Models\User;
+use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -18,9 +18,12 @@ class DatabaseSeeder extends Seeder
         $this->call(HeadphoneStockSeeder::class);
         $this->call(RolesSeeder::class);
 
-//        User::factory()->create([
-//            'name' => 'Pavel del Pozo',
-//            'email' => 'paveldelpozo@gmail.com',
-//        ]);
+        $user = User::firstOrCreate([
+            'name' => 'Pavel del Pozo',
+            'email' => 'paveldelpozo@gmail.com',
+            'password' => bcrypt('12345678'),
+        ]);
+
+        $user->assignRole('admin');
     }
 }

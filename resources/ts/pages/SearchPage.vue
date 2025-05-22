@@ -7,6 +7,7 @@ import HeadphoneStockIndicator from '@/components/stock/HeadphoneStockIndicator.
 import type { Visitor } from '@/types/visitor'
 
 const visitors = ref<Visitor[]>([])
+const visitorSearch = ref<InstanceType<typeof VisitorSearch>>()
 const router = useRouter()
 
 function handleResults(result: any) {
@@ -25,13 +26,18 @@ function goToEdit(visitor: Visitor) {
 </script>
 
 <template>
-    <v-container>
-        <VisitorSearch @results="handleResults" />
+    <v-container class="text-center">
+        <h1 class="text-h4 font-weight-bold my-6">Bienvenido a la gestión de Auriculares</h1>
+
         <HeadphoneStockIndicator class="my-4" />
+
+        <VisitorSearch ref="visitorSearch" @results="handleResults" />
+
         <VisitorList
             v-if="visitors.length > 1"
             :visitors="visitors"
             @select="goToEdit"
+            @refresh="visitorSearch.search()"
         />
     </v-container>
 </template>

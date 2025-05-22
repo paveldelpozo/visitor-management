@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Lanza Laravel y Vite en paralelo (requiere npm-run-all)
-# npm install --save-dev npm-run-all
+# Ejecuta Laravel, Vite y Reverb en paralelo
+# Requiere instalar 'npm-run-all' como dependencia de desarrollo
 
-npx npm-run-all --parallel serve vite
+npx npm-run-all --parallel serve vite reverb

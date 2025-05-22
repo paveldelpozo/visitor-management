@@ -1,31 +1,36 @@
+<template>
+    <v-container>
+        <h1>Iniciar sesión</h1>
+        <v-form @submit.prevent="submitLogin">
+            <v-text-field autocomplete="email" variant="solo" v-model="email" label="Email" />
+            <v-text-field autocomplete="password" variant="solo" v-model="password" label="Contraseña" :type="type">
+                <template #append-inner>
+                    <v-icon @click="type = (type === 'password' ? 'text' : 'password')">{{ type === 'password' ? 'mdi-eye' : 'mdi-eye-off' }}</v-icon>
+                </template>
+            </v-text-field>
+            <v-btn block size="large" type="submit" color="primary" :loading="auth.loading">Entrar</v-btn>
+            <v-alert v-if="auth.error" type="error" class="mt-4">{{ auth.error }}</v-alert>
+        </v-form>
+    </v-container>
+</template>
+
 <script setup lang="ts">
 import { ref } from 'vue'
-import axios from 'axios'
 import { useRouter } from 'vue-router'
+import { useAuthStore } from '@/store/auth'
 
+const auth = useAuthStore()
+const router = useRouter()
 const email = ref('')
 const password = ref('')
-const error = ref('')
-const router = useRouter()
+const type = ref('password')
 
-async function login() {
-    error.value = ''
+async function submitLogin() {
     try {
-        await axios.get('/sanctum/csrf-cookie')
-        const response = await axios.post('/api/login', { email: email.value, password: password.value })
-        localStorage.setItem('auth_token', '1') // solo para mantener lógica existente
+        await auth.login(email.value, password.value)
         router.push('/')
-    } catch (err: any) {
-        error.value = err.response?.data?.message || 'Error desconocido'
+    } catch {
+        // el error ya se maneja en el store
     }
 }
 </script>
-
-<template>
-    <v-form @submit.prevent="login">
-        <v-text-field v-model="email" label="Email" />
-        <v-text-field v-model="password" label="Contraseña" type="password" />
-        <v-btn type="submit" color="primary">Entrar</v-btn>
-        <v-alert v-if="error" type="error">{{ error }}</v-alert>
-    </v-form>
-</template>

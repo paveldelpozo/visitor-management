@@ -1,19 +1,28 @@
-import axios from 'axios'
-import axiosRetry from 'axios-retry'
-
-// @ts-ignore
-axiosRetry(axios, {
-    retries: 3,
-    retryDelay: (retryCount) => retryCount * 1000,
-    retryCondition: (error) => !error.response || error.code === 'ECONNABORTED',
-})
+import axios from 'axios';
 
 // @ts-ignore
 window.axios = axios;
 
-// @ts-ignore
-window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
-// @ts-ignore
-window.axios.defaults.withCredentials = true
-// @ts-ignore
-window.axios.defaults.baseURL = 'http://localhost:8000'
+// Establecer baseURL de la API (ajústalo si usas proxy o puerto diferente)
+axios.defaults.baseURL = 'http://localhost:8000'
+
+// Permitir el envío de cookies para sesiones Sanctum
+axios.defaults.withCredentials = true
+
+
+axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+
+const token = localStorage.getItem('auth_token')
+if (token) {
+    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
+}
+
+export default axios
+
+/**
+ * Echo exposes an expressive API for subscribing to channels and listening
+ * for events that are broadcast by Laravel. Echo and event broadcasting
+ * allow your team to quickly build robust real-time web applications.
+ */
+
+import './echo';
