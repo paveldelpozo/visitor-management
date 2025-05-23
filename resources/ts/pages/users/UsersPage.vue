@@ -84,7 +84,7 @@ function confirmDelete(user: any) {
 async function deleteUser() {
     if (userToDelete.value) {
         await useApi('delete', `/api/users/${userToDelete.value.id}`)
-        closeDialog()
+        dialogDelete.value = false
         await fetchUsers()
     }
 }
