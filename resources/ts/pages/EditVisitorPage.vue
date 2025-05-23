@@ -52,7 +52,12 @@ watch(tab, () => {
 </script>
 
 <template>
-    <v-container v-if="visitor">
+    <v-container v-if="visitor" fluid>
+        <h1 class="text-h5 mb-4">
+            <v-icon class="mr-2" color="primary">mdi-account</v-icon>
+            Edición del asistente: <strong class="text-primary">{{ visitor.name }} {{ visitor.surname }}</strong>
+        </h1>
+
         <VCard :loading="loading">
             <v-tabs v-model="tab" color="primary">
                 <v-tab value="details">

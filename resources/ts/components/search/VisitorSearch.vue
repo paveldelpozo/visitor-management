@@ -36,11 +36,16 @@ defineExpose({ search })
 
 <template>
     <v-form @submit.prevent="search">
-        <v-text-field v-model="form.search" autofocus variant="solo" clearable label="Buscar por nombre, teléfono, email, etc." @keyup.enter="search">
-            <template #append-inner>
-                <v-icon @click="search">mdi-magnify</v-icon>
-            </template>
-        </v-text-field>
+        <v-text-field
+            v-model="form.search"
+            autofocus
+            variant="solo"
+            clearable
+            label="Buscar asistente..."
+            prepend-inner-icon="mdi-magnify"
+            @input="search"
+            @keyup.enter="search"
+        />
 <!--        <v-text-field v-model="form.name" label="Nombre" />-->
 <!--        <v-text-field v-model="form.surname" label="Apellidos" />-->
 <!--        <v-text-field v-model="form.phone" label="Teléfono" />-->

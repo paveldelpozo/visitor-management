@@ -52,7 +52,7 @@ onMounted(() => {
             <v-img src="/img/seonthebeach_logo.png" max-width="50%" min-width="320"></v-img>
         </div>
 
-        <h1 class="text-h4 font-weight-bold my-6">Gestión de Auriculares</h1>
+        <h1 class="text-h5 font-weight-bold my-6">Gestión de Auriculares</h1>
 
         <HeadphoneStockIndicator class="my-4" />
 

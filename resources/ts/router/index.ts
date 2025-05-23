@@ -14,6 +14,7 @@ const routes: RouteRecordRaw[] = [
     { path: '/logs', name: 'logs', component: LogsPage, meta: { requiresAuth: true } },
     { path: '/login', name: 'login', component: () => import('@/pages/LoginPage.vue') },
     { path: '/error', name: 'error', component: () => import('@/components/ui/ErrorScreen.vue') },
+    { path: '/visitors', name: 'visitor.index', component: () => import('@/pages/VisitorsPage.vue'), meta: { requiresAuth: true } },
     { path: '/:pathMatch(.*)*', name: 'not-found', component: () => import('@/pages/NotFoundPage.vue') }
 ]
 

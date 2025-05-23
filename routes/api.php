@@ -50,12 +50,13 @@ Route::get('/user', function (Request $request) {
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/visitors/search', [VisitorController::class, 'search']);
+    Route::get('/visitors/export', [VisitorController::class, 'export']); //->middleware('role:admin');
+    Route::get('/visitors', [VisitorController::class, 'index']);
     Route::post('/visitors', [VisitorController::class, 'store']);
     Route::get('/visitors/{visitor}', [VisitorController::class, 'show']);
     Route::put('/visitors/{visitor}', [VisitorController::class, 'update']);
     Route::delete('/visitors/{id}', [VisitorController::class, 'destroy']);
     Route::get('/visitors/{visitor}/logs', [VisitorController::class, 'logs']);
-    Route::get('/visitors/export', [VisitorController::class, 'export'])->middleware('role:admin');
 
     Route::get('/stock', [HeadphoneStockController::class, 'show']); //->middleware('role:admin');
     Route::put('/stock', [HeadphoneStockController::class, 'update']); //->middleware('role:admin');

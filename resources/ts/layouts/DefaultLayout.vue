@@ -33,9 +33,13 @@ async function logout() {
                     <template #prepend><v-icon>mdi-home</v-icon></template>
                     <v-list-item-title>Inicio</v-list-item-title>
                 </v-list-item>
+                <v-list-item to="/visitors">
+                    <template #prepend><v-icon>mdi-account-multiple</v-icon></template>
+                    <v-list-item-title>Asistentes</v-list-item-title>
+                </v-list-item>
                 <v-list-item link to="/create">
                     <template #prepend><v-icon>mdi-account-plus</v-icon></template>
-                    <v-list-item-title>Nuevo visitante</v-list-item-title>
+                    <v-list-item-title>Nuevo asistente</v-list-item-title>
                 </v-list-item>
                 <v-list-item link to="/logs">
                     <template #prepend><v-icon>mdi-file-document-outline</v-icon></template>
@@ -46,8 +50,8 @@ async function logout() {
 
         <v-app-bar app color="primary" dark>
             <v-app-bar-nav-icon v-if="user" @click="drawer = !drawer" />
-            <v-toolbar-title @click="router.push('/')" style="cursor: pointer">
-                <VIcon>mdi-umbrella-beach</VIcon>
+            <v-toolbar-title @click="router.push('/')" style="cursor: pointer" class="d-flex align-center">
+                <VIcon size="small">mdi-umbrella-beach</VIcon>
                 SEonTheBeach | Gestión de Auriculares
             </v-toolbar-title>
             <v-spacer />

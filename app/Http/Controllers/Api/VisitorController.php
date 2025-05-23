@@ -17,6 +17,17 @@ use JetBrains\PhpStorm\NoReturn;
 
 class VisitorController extends Controller
 {
+    public function index(Request $request): \Illuminate\Http\JsonResponse
+    {
+        $query = Visitor::query();
+
+        $request->get('search') && $query->search($request->get('search'));
+
+        return response()->json(
+            $query->orderBy('created_at', 'desc')->paginate($request->get('size', 25))
+        );
+    }
+
     public function search(VisitorSearchRequest $request): \Illuminate\Http\JsonResponse
     {
         $query = Visitor::query();

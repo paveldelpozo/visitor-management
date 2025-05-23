@@ -4,7 +4,7 @@
             <v-img src="/img/seonthebeach_logo.png" max-width="50%" min-width="320"></v-img>
         </div>
 
-        <h1>Iniciar sesión</h1>
+        <h1 class="text-h5 mb-4">Iniciar sesión</h1>
         <v-form @submit.prevent="submitLogin">
             <v-text-field autocomplete="email" variant="solo" v-model="email" label="Email" />
             <v-text-field autocomplete="password" variant="solo" v-model="password" label="Contraseña" :type="type">
@@ -32,7 +32,7 @@ const type = ref('password')
 async function submitLogin() {
     try {
         await auth.login(email.value, password.value)
-        router.push('/')
+        window.location.href = '/'
     } catch {
         // el error ya se maneja en el store
     }
