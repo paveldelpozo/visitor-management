@@ -8,11 +8,11 @@ const loading = ref(false)
 const selected = ref<any | null>(null)
 
 const headers = [
-    { text: 'ID', value: 'id' },
-    { text: 'Mensaje', value: 'message' },
-    { text: 'Usuario', value: 'user' },
-    { text: 'Fecha', value: 'created_at' },
-    { text: 'Acciones', value: 'actions', sortable: false },
+    { text: 'ID', value: 'id', nowrap: true },
+    { text: 'Mensaje', value: 'message', nowrap: true },
+    { text: 'Usuario', value: 'user', nowrap: true },
+    { text: 'Fecha', value: 'created_at', nowrap: true },
+    { text: 'Acciones', value: 'actions', nowrap: true, sortable: false },
 ]
 
 onMounted(async () => {
@@ -52,7 +52,7 @@ onMounted(async () => {
                     <p><strong>URL:</strong> {{ selected.url }}</p>
                     <p><strong>IP:</strong> {{ selected.ip }}</p>
                     <p><strong>Usuario:</strong> {{ selected.user?.email || 'Anónimo' }}</p>
-                    <v-textarea label="Stacktrace" v-model="selected.stack" readonly />
+                    <v-textarea placeholder="Stacktrace" v-model="selected.stack" readonly />
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer />

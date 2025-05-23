@@ -72,12 +72,26 @@ async function submit() {
 
 <template>
     <v-form @submit.prevent="submit" class="px-1 pb-1">
-        <v-text-field v-model="form.name" autofocus variant="solo" label="Nombre" required />
-        <v-text-field v-model="form.surname" variant="solo" label="Apellidos" required />
-        <v-text-field v-model="form.company" variant="solo" label="Empresa" />
-        <v-text-field v-model="form.identity_id" variant="solo" label="DNI/Pasaporte" />
-        <v-text-field v-model="form.phone" variant="solo" label="Teléfono" required />
-        <v-text-field v-model="form.email" variant="solo" label="Email" />
+        <v-row>
+            <v-col cols="12">
+                <v-text-field v-model="form.name" autofocus variant="solo" placeholder="Nombre" hide-details required />
+            </v-col>
+            <v-col cols="12">
+                <v-text-field v-model="form.surname" variant="solo" placeholder="Apellidos" hide-details required />
+            </v-col>
+            <v-col cols="12">
+                <v-text-field v-model="form.company" variant="solo" placeholder="Empresa" hide-details />
+            </v-col>
+            <v-col cols="12">
+                <v-text-field v-model="form.identity_id" variant="solo" placeholder="DNI/Pasaporte" hide-details />
+            </v-col>
+            <v-col cols="12">
+                <v-text-field v-model="form.phone" variant="solo" placeholder="Teléfono" hide-details type="tel" inputmode="tel" required />
+            </v-col>
+            <v-col cols="12">
+                <v-text-field v-model="form.email" variant="solo" placeholder="Email" hide-details type="email" inputmode="email" />
+            </v-col>
+        </v-row>
 
         <div class="d-flex justify-center my-4 mb-8">
             <div class="d-flex align-center pa-2 border rounded-lg elevation-2">

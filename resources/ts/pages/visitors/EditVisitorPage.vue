@@ -4,6 +4,8 @@ import { useRoute, useRouter } from 'vue-router'
 import type { Visitor } from '@/types/visitor'
 import VisitorForm from '@/components/forms/VisitorForm.vue'
 import VisitorLogTable from '@/components/logs/VisitorLogTable.vue'
+import HeaderTitle from "@/components/ui/HeaderTitle.vue";
+import { usePermissions } from "@/composables/usePermissions";
 import { echo } from '@/echo'
 import { useApi } from "@/composables/useApi";
 import { catchError } from "@/lib/catchErrors";
@@ -12,6 +14,8 @@ const route = useRoute()
 const router = useRouter()
 const loading = ref(false)
 const visitor = ref<Visitor | null>(null)
+
+const { isAdmin } = usePermissions()
 
 const tab = ref(route.query.tab ?? 'details')
 
@@ -50,18 +54,17 @@ watch(tab, () => {
 
 <template>
     <v-container v-if="visitor" fluid>
-        <h1 class="text-h5 mb-4">
-            <v-icon class="mr-2" color="info">mdi-account</v-icon>
+        <HeaderTitle icon="mdi-account-edit">
             Edición del asistente: <strong class="text-info">{{ visitor.name }} {{ visitor.surname }}</strong>
-        </h1>
+        </HeaderTitle>
 
         <VCard :loading="loading">
             <v-tabs v-model="tab" color="info">
                 <v-tab value="details">
                     <v-icon class="mr-2">mdi-account</v-icon>
-                    Asistente
+                    Datos personales
                 </v-tab>
-                <VTab value="logs">
+                <VTab v-if="isAdmin" value="logs">
                     <v-icon class="mr-2">mdi-history</v-icon>
                     Logs
                 </VTab>
@@ -74,7 +77,7 @@ watch(tab, () => {
                     <v-tabs-window-item value="details">
                         <VisitorForm :visitor="visitor" isEdit @updated="reload" />
                     </v-tabs-window-item>
-                    <v-tabs-window-item value="logs">
+                    <v-tabs-window-item v-if="isAdmin" value="logs">
                         <VisitorLogTable :visitorId="visitor.id" class="mt-6" />
                     </v-tabs-window-item>
                 </v-tabs-window>

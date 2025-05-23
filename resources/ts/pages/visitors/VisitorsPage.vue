@@ -5,6 +5,7 @@ import type { Visitor } from "@/types/visitor";
 import { echo } from "@/echo";
 import { useApi } from "@/composables/useApi";
 import { catchError } from "@/lib/catchErrors";
+import HeaderTitle from "@/components/ui/HeaderTitle.vue";
 
 const visitors = ref<Visitor[]>([])
 const total = ref(0)
@@ -15,15 +16,15 @@ const search = ref('')
 const router = useRouter()
 
 const headers = [
-    { title: 'Nombre', value: 'name' },
-    { title: 'Apellidos', value: 'surname' },
-    { title: 'Teléfono', value: 'phone' },
-    { title: 'Email', value: 'email' },
-    { title: 'Empresa', value: 'company' },
-    { title: 'Auriculares', value: 'headphones' },
-    { title: 'Fecha de creación', value: 'created_at', sortable: false },
-    { title: 'Última actualización', value: 'updated_at', sortable: false },
-    { title: 'Acciones', value: 'actions', sortable: false },
+    { title: 'Nombre', value: 'name', nowrap: true },
+    { title: 'Apellidos', value: 'surname', nowrap: true },
+    { title: 'Teléfono', value: 'phone', nowrap: true },
+    { title: 'Email', value: 'email', nowrap: true },
+    { title: 'Empresa', value: 'company', nowrap: true },
+    { title: 'Auriculares', value: 'headphones', nowrap: true },
+    { title: 'Fecha de creación', value: 'created_at', nowrap: true, sortable: false },
+    { title: 'Última actualización', value: 'updated_at', nowrap: true, sortable: false },
+    { title: 'Acciones', value: 'actions', nowrap: true, sortable: false },
 ]
 
 async function fetchVisitors() {
@@ -50,7 +51,7 @@ async function fetchVisitors() {
 }
 
 function editVisitor(visitor: any) {
-    router.push({ name: 'edit', params: { id: visitor.id } })
+    router.push({ name: 'visitor.edit', params: { id: visitor.id } })
 }
 
 const deleting = ref(false)
@@ -112,22 +113,27 @@ onMounted(() => {
     <v-container fluid>
         <v-row>
             <v-col>
-                <h1 class="text-h5 mb-4">
-                    <v-icon class="mr-2" color="info">mdi-account-multiple</v-icon>
-                    Lista de asistentes
-                </h1>
+                <HeaderTitle text="Asistentes" icon="mdi-account-multiple" />
 
-                <v-text-field
-                    v-model="search"
-                    autofocus
-                    label="Buscar asistente..."
-                    variant="solo"
-                    prepend-inner-icon="mdi-magnify"
-                    @input="fetchVisitors"
-                    @keyup.enter="fetchVisitors"
-                    class="mb-4"
-                    clearable
-                />
+                <div class="d-flex justify-space-between align-top mb-4">
+                    <v-text-field
+                        v-model="search"
+                        autofocus
+                        placeholder="Buscar asistente..."
+                        hide-details
+                        variant="solo"
+                        prepend-inner-icon="mdi-magnify"
+                        @input="fetchVisitors"
+                        @keyup.enter="fetchVisitors"
+                        class="mb-4"
+                        clearable
+                    />
+
+                    <v-btn color="info" class="ml-2" size="x-large" link :to="{ name: 'visitor.create' }">
+                        <v-icon>mdi-account-plus</v-icon>
+                        <span class="ml-2 d-none">Asistente</span>
+                    </v-btn>
+                </div>
 
                 <v-data-table
                     :headers="headers"
@@ -141,13 +147,13 @@ onMounted(() => {
                 >
                     <template #item.headphones="{ item }">
                         <div class="text-center">
-                            <v-btn icon color="info" size="x-small" class="mr-2" @click.stop="updateVisitor(v, -1)">
+                            <v-btn icon color="info" size="x-small" class="mr-2" @click.stop="updateVisitor(item, -1)">
                                 <v-icon>mdi-minus</v-icon>
                             </v-btn>
 
                             <strong style="display: inline-block; min-width: 20px;">{{ item.headphones }}</strong>
 
-                            <v-btn icon color="info" size="x-small" class=ml-2 @click.stop="updateVisitor(v, 1)">
+                            <v-btn icon color="info" size="x-small" class=ml-2 @click.stop="updateVisitor(item, 1)">
                                 <v-icon>mdi-plus</v-icon>
                             </v-btn>
                         </div>

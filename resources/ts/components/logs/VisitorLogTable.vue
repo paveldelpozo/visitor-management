@@ -9,9 +9,9 @@ const props = defineProps<{ visitorId: number, page?: number, search?: string }>
 const logs = ref<VisitorLog[]>([])
 
 const headers = [
-    { title: 'Usuario', value: 'user' },
-    { title: 'Acción', value: 'action' },
-    { title: 'Fecha', value: 'created_at' }
+    { title: 'Usuario', value: 'user', nowrap: true },
+    { title: 'Acción', value: 'action', nowrap: true },
+    { title: 'Fecha', value: 'created_at', nowrap: true }
 ]
 
 async function loadLogs() {

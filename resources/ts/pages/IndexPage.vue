@@ -6,6 +6,7 @@ import VisitorSearch from '@/components/search/VisitorSearch.vue'
 import VisitorList from '@/components/search/VisitorList.vue'
 import HeadphoneStockIndicator from '@/components/stock/HeadphoneStockIndicator.vue'
 import type { Visitor } from '@/types/visitor'
+import HeaderTitle from "@/components/ui/HeaderTitle.vue";
 
 const visitorSearchRef = ref<InstanceType<typeof VisitorSearch>>()
 const headphoneStockIndicatorRef = ref<InstanceType<typeof HeadphoneStockIndicator>>()
@@ -39,11 +40,11 @@ onMounted(() => {
 
 <template>
     <v-container fluid class="text-center">
-        <div class="d-flex justify-center mb-4">
-            <v-img src="/img/seonthebeach_logo.png" max-width="30%" min-width="320"></v-img>
+        <div class="d-flex justify-center my-4">
+            <v-img src="/img/seonthebeach_logo.png" max-width="25%" min-width="320"></v-img>
         </div>
 
-        <h1 class="text-h5 font-weight-bold my-6">Gestión de Auriculares</h1>
+        <HeaderTitle text="Gestión de Auriculares"/>
 
         <VisitorSearch ref="visitorSearchRef" @results="handleResults" @loading="(value) => loading = value" />
 

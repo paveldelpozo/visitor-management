@@ -41,17 +41,29 @@ function handleSubmit() {
             <v-card>
                 <v-card-title class="text-h6 bg-info">{{ props.user ? 'Editar usuario' : 'Nuevo usuario' }}</v-card-title>
                 <v-card-text>
-                    <v-text-field autofocus variant="solo" v-model="form.name" label="Nombre" required />
-                    <v-text-field variant="solo" v-model="form.email" label="Email" type="email" required />
-                    <v-select
-                        variant="solo"
-                        v-model="form.role"
-                        :items="['admin', 'user']"
-                        label="Rol"
-                        required
-                    />
-                    <v-text-field variant="solo" v-model="form.password" autocomplete="password" label="Contraseña" type="password" :required="!props.user" />
-                    <v-text-field variant="solo" v-model="form.password_confirmation" autocomplete="password" label="Confirmar contraseña" type="password" :required="!props.user" />
+                    <v-row>
+                        <v-col cols="12">
+                            <v-text-field autofocus variant="solo" v-model="form.name" placeholder="Nombre" hide-details required />
+                        </v-col>
+                        <v-col cols="12">
+                            <v-text-field variant="solo" v-model="form.email" placeholder="Email" hide-details type="email" inputmode="email" required />
+                        </v-col>
+                        <v-col cols="12">
+                            <v-select
+                                variant="solo"
+                                v-model="form.role"
+                                :items="['admin', 'user']"
+                                placeholder="Rol"
+                                required
+                            />
+                        </v-col>
+                        <v-col cols="12">
+                            <v-text-field variant="solo" v-model="form.password" autocomplete="password" placeholder="Contraseña" hide-details type="password" :required="!props.user" />
+                        </v-col>
+                        <v-col cols="12">
+                            <v-text-field variant="solo" v-model="form.password_confirmation" autocomplete="password" placeholder="Confirmar contraseña" hide-details type="password" :required="!props.user" />
+                        </v-col>
+                    </v-row>
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer />

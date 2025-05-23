@@ -3,6 +3,7 @@ import {ref, onMounted, watch} from 'vue'
 import { useRoute, useRouter } from "vue-router";
 import { useApi } from "@/composables/useApi";
 import { catchError } from "@/lib/catchErrors";
+import HeaderTitle from "@/components/ui/HeaderTitle.vue";
 
 const route = useRoute()
 const router = useRouter()
@@ -15,11 +16,11 @@ const filters = ref({
 })
 
 const headers = [
-    { title: 'Usuario', value: 'user' },
-    { title: 'Asistente', value: 'visitor' },
-    { title: 'Acción', value: 'action' },
-    { title: 'Fecha', value: 'created_at' },
-    { title: 'Meta', value: 'meta' },
+    { title: 'Usuario', value: 'user', nowrap: true },
+    { title: 'Asistente', value: 'visitor', nowrap: true },
+    { title: 'Acción', value: 'action', nowrap: true },
+    { title: 'Fecha', value: 'created_at', nowrap: true },
+    { title: 'Meta', value: 'meta', nowrap: true },
 ]
 
 const getParams = () => {
@@ -65,17 +66,15 @@ onMounted(fetchLogs)
     <v-container fluid>
         <v-row>
             <v-col>
-                <h1 class="text-h5 mb-4">
-                    <v-icon class="mr-2" color="info">mdi-file-document-outline</v-icon>
-                    Registro de acciones
-                </h1>
+                <HeaderTitle text="Registro de acciones" icon="mdi-file-document-outline" />
 
                 <v-row class="mb-4" dense>
                     <v-col cols="12" md="5">
                         <v-text-field
                             v-model="filters.user"
                             variant="solo"
-                            label="Filtrar por usuario"
+                            placeholder="Filtrar por usuario"
+                            hide-details
                             clearable
                             prepend-inner-icon="mdi-account"
                             @keyup.enter="fetchLogs"
@@ -86,7 +85,8 @@ onMounted(fetchLogs)
                         <v-text-field
                             v-model="filters.date"
                             variant="solo"
-                            label="Filtrar por fecha (YYYY-MM-DD)"
+                            placeholder="Filtrar por fecha (YYYY-MM-DD)"
+                            hide-details
                             clearable
                             prepend-inner-icon="mdi-calendar"
                             @keyup.enter="fetchLogs"

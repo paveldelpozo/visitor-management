@@ -6,6 +6,7 @@ import { useRoute, useRouter } from 'vue-router'
 import UserForm from "@/components/forms/UserForm.vue";
 import ConfirmDialog from "@/components/ui/ConfirmDialog.vue";
 import { useAuthStore } from '@/store/auth'
+import HeaderTitle from "@/components/ui/HeaderTitle.vue";
 
 const route = useRoute()
 const router = useRouter()
@@ -23,10 +24,10 @@ const auth = useAuthStore()
 const { user } = storeToRefs(useAuthStore())
 
 const headers = [
-    { title: 'Nombre', value: 'name' },
-    { title: 'Email', value: 'email' },
-    { title: 'Rol', value: 'role' },
-    { title: 'Acciones', value: 'actions', sortable: false }
+    { title: 'Nombre', value: 'name', nowrap: true },
+    { title: 'Email', value: 'email', nowrap: true },
+    { title: 'Rol', value: 'role', nowrap: true },
+    { title: 'Acciones', value: 'actions', nowrap: true, sortable: false }
 ]
 
 const fetchUsers = async () => {
@@ -123,13 +124,10 @@ onMounted(async () => {
     <v-container fluid>
         <v-row align="center" class="mb-4">
             <v-col>
-                <h1 class="text-h5 font-weight-bold">
-                    <v-icon class="mr-2" color="info">mdi-account-cog</v-icon>
-                    Usuarios
-                </h1>
+                <HeaderTitle text="Usuarios" icon="mdi-account-cog" />
             </v-col>
             <v-col cols="12" sm="6" md="4">
-                <v-text-field v-model="search" variant="solo" label="Buscar" clearable hide-details density="compact" />
+                <v-text-field v-model="search" variant="solo" placeholder="Buscar" clearable hide-details density="compact" />
             </v-col>
             <v-col cols="auto">
                 <v-btn color="primary" @click="openCreate">Nuevo usuario</v-btn>

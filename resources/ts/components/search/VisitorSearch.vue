@@ -37,16 +37,22 @@ defineExpose({ search })
 </script>
 
 <template>
-    <v-form @submit.prevent="search">
+    <v-form @submit.prevent="search" class="d-flex justify-space-between align-center mb-4">
         <v-text-field
             v-model="form.search"
             autofocus
             variant="solo"
+            hide-details
             clearable
-            label="Buscar asistente..."
+            placeholder="Buscar asistente..."
             prepend-inner-icon="mdi-magnify"
             @keyup.enter="search"
             @click:clear="search"
         />
+
+        <v-btn color="info" class="ml-2" size="x-large" link :to="{ name: 'visitor.create' }">
+            <v-icon>mdi-account-plus</v-icon>
+            <span class="ml-2 d-none">Asistente</span>
+        </v-btn>
     </v-form>
 </template>

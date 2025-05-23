@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/store/auth'
+import HeaderTitle from "@/components/ui/HeaderTitle.vue";
 
 const auth = useAuthStore()
 const router = useRouter()
@@ -21,14 +22,15 @@ async function submitLogin() {
 
 <template>
     <v-container>
-        <div class="d-flex justify-center mb-4">
+        <div class="d-flex justify-center my-4">
             <v-img src="/img/seonthebeach_logo.png" max-width="50%" min-width="320"></v-img>
         </div>
 
-        <h1 class="text-h5 mb-4">Iniciar sesión</h1>
+        <HeaderTitle text="Iniciar sessión" />
+
         <v-form @submit.prevent="submitLogin">
-            <v-text-field autocomplete="email" variant="solo" v-model="email" label="Email" />
-            <v-text-field autocomplete="password" variant="solo" v-model="password" label="Contraseña" :type="type">
+            <v-text-field autocomplete="email" variant="solo" v-model="email" placeholder="Email" hide-details type="email" inputmode="email" />
+            <v-text-field autocomplete="password" variant="solo" v-model="password" placeholder="Contraseña" :type="type">
                 <template #append-inner>
                     <v-icon @click="type = (type === 'password' ? 'text' : 'password')">{{ type === 'password' ? 'mdi-eye' : 'mdi-eye-off' }}</v-icon>
                 </template>

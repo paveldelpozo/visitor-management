@@ -53,7 +53,7 @@ class VisitorController extends Controller
 
         return response()->json([
             'status' => 'multiple',
-            'visitors' => $results->latest()->limit(10)->get()
+            'visitors' => $results->orderBy('updated_at', 'desc')->limit(10)->get()
         ]);
     }
 
