@@ -1,16 +1,17 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import { useRouter } from "vue-router";
+import {ref, onMounted, watch} from 'vue'
+import { useRoute, useRouter } from "vue-router";
 import { useApi } from "@/composables/useApi";
 import { catchError } from "@/lib/catchErrors";
 
+const route = useRoute()
 const router = useRouter()
 
 const logs = ref([])
 const loading = ref(true)
 const filters = ref({
-    user: '',
-    date: '',
+    user: route.query.user || '',
+    date: route.query.date || '',
 })
 
 const headers = [
@@ -21,9 +22,7 @@ const headers = [
     { title: 'Meta', value: 'meta' },
 ]
 
-async function fetchLogs() {
-    loading.value = true
-
+const getParams = () => {
     const params: any = {}
 
     if (filters.value.user)
@@ -32,7 +31,13 @@ async function fetchLogs() {
     if (filters.value.date)
         params.date = filters.value.date
 
-    const queryString = new URLSearchParams(params).toString()
+    return params
+}
+
+async function fetchLogs() {
+    loading.value = true
+
+    const queryString = new URLSearchParams(getParams()).toString()
 
     const { data, error, status } = await useApi('get', `/api/logs?${queryString}`)
 
@@ -45,11 +50,15 @@ async function fetchLogs() {
     loading.value = false
 }
 
-onMounted(fetchLogs)
-
 function formatMeta(meta: any) {
     return JSON.stringify(meta, null, 2)
 }
+
+watch(filters, () => {
+    router.push({ query: getParams() })
+}, { deep: true })
+
+onMounted(fetchLogs)
 </script>
 
 <template>

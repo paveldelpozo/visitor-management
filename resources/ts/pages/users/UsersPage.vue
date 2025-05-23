@@ -18,6 +18,7 @@ const router = useRouter()
 const headers = [
     { title: 'Nombre', value: 'name' },
     { title: 'Email', value: 'email' },
+    { title: 'Rol', value: 'role' },
     { title: 'Acciones', value: 'actions', sortable: false }
 ]
 
@@ -84,9 +85,15 @@ async function deleteUser() {
         </v-row>
 
         <v-data-table :items="users" :headers="headers" :items-per-page="10" class="elevation-1 rounded">
+            <template #item.role="{ item }">
+                <v-chip color="info">{{ item.roles[0]?.name }}</v-chip>
+            </template>
             <template #item.actions="{ item }">
-                <v-btn icon size="small" @click="openEdit(item)"><v-icon>mdi-pencil</v-icon></v-btn>
-                <v-btn icon size="small" @click="confirmDelete(item)"><v-icon color="red">mdi-delete</v-icon></v-btn>
+                <div class="d-flex justify-end">
+                    <v-btn icon size="small" class="mr-2" link :to="{ name: 'logs', query: { user: item.name } }"><v-icon>mdi-file-document-outline</v-icon></v-btn>
+                    <v-btn icon size="small" class="mr-2" @click="openEdit(item)"><v-icon>mdi-pencil</v-icon></v-btn>
+                    <v-btn icon size="small" color="red" @click="confirmDelete(item)"><v-icon>mdi-delete</v-icon></v-btn>
+                </div>
             </template>
         </v-data-table>
 

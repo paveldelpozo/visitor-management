@@ -11,6 +11,7 @@ const props = defineProps<{
 const form = ref({
     name: '',
     email: '',
+    role: 'user',
     password: '',
     password_confirmation: ''
 })
@@ -20,11 +21,12 @@ watch(() => props.user, (val) => {
         form.value = {
             name: val.name,
             email: val.email,
+            role: val.role,
             password: '',
             password_confirmation: ''
         }
     } else {
-        form.value = { name: '', email: '', password: '', password_confirmation: '' }
+        form.value = { name: '', email: '', role: 'user', password: '', password_confirmation: '' }
     }
 }, { immediate: true })
 
@@ -40,6 +42,12 @@ function handleSubmit() {
             <v-card-text>
                 <v-text-field v-model="form.name" label="Nombre" required />
                 <v-text-field v-model="form.email" label="Email" type="email" required />
+                <v-select
+                    v-model="form.role"
+                    :items="['admin', 'user']"
+                    label="Rol"
+                    required
+                />
                 <v-text-field v-model="form.password" label="Contraseña" type="password" :required="!props.user" />
                 <v-text-field v-model="form.password_confirmation" label="Confirmar contraseña" type="password" :required="!props.user" />
             </v-card-text>

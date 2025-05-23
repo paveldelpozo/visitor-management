@@ -21,7 +21,7 @@ class UserController extends Controller
             });
         }
 
-        $users = $query->orderBy('name')->paginate(10);
+        $users = $query->with('roles')->orderBy('name')->paginate(10);
         return response()->json($users);
     }
 
@@ -30,6 +30,7 @@ class UserController extends Controller
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'role' => ['required', 'string', Rule::exists('roles', 'name')],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
 
@@ -39,6 +40,8 @@ class UserController extends Controller
             'password' => Hash::make($validated['password']),
         ]);
 
+        $user->assignRole($validated['role']);
+
         return response()->json($user, 201);
     }
 
@@ -47,6 +50,7 @@ class UserController extends Controller
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
+            'role' => ['required', 'string', Rule::exists('roles', 'name')],
             'password' => ['nullable', 'string', 'min:8', 'confirmed'],
         ]);
 
@@ -58,6 +62,8 @@ class UserController extends Controller
         }
 
         $user->save();
+
+        $user->syncRoles([$validated['role']]);
 
         return response()->json($user);
     }
