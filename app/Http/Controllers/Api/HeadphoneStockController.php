@@ -12,6 +12,7 @@ class HeadphoneStockController extends Controller
     public function show(): \Illuminate\Http\JsonResponse
     {
         $stock = HeadphoneStock::firstOrFail();
+
         return response()->json([
             'total' => $stock->total,
             'used' => Visitor::sum('headphones'),

@@ -62,8 +62,8 @@ Route::middleware('auth:sanctum')->prefix('visitors')->group(function () {
 });
 
 Route::middleware('auth:sanctum')->prefix('stock')->group(function () {
-    Route::get('/stock', [HeadphoneStockController::class, 'show'])->middleware('role:admin');
-    Route::put('/stock', [HeadphoneStockController::class, 'update'])->middleware('role:admin');
+    Route::get('/', [HeadphoneStockController::class, 'show']);
+    Route::put('/', [HeadphoneStockController::class, 'update']);
 });
 
 Route::middleware('auth:sanctum')->group(function () {
