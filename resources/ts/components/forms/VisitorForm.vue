@@ -79,7 +79,7 @@ async function submit() {
             </div>
         </div>
 
-        <v-btn block type="submit" color="primary" class="mt-4" size="large">
+        <v-btn block type="submit" color="info" class="mt-4" size="large">
             {{ props.isEdit ? 'Actualizar' : 'Crear' }}
         </v-btn>
     </v-form>

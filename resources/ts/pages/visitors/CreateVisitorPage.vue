@@ -5,7 +5,7 @@ import VisitorForm from '@/components/forms/VisitorForm.vue'
 <template>
     <v-container fluid>
         <h1 class="text-h5 mb-4">
-            <v-icon class="mr-2" color="primary">mdi-account-plus</v-icon>
+            <v-icon class="mr-2" color="info">mdi-account-plus</v-icon>
             Crear asistente
         </h1>
         <VisitorForm :isEdit="false" />

@@ -54,12 +54,12 @@ watch(tab, () => {
 <template>
     <v-container v-if="visitor" fluid>
         <h1 class="text-h5 mb-4">
-            <v-icon class="mr-2" color="primary">mdi-account</v-icon>
-            Edición del asistente: <strong class="text-primary">{{ visitor.name }} {{ visitor.surname }}</strong>
+            <v-icon class="mr-2" color="info">mdi-account</v-icon>
+            Edición del asistente: <strong class="text-info">{{ visitor.name }} {{ visitor.surname }}</strong>
         </h1>
 
         <VCard :loading="loading">
-            <v-tabs v-model="tab" color="primary">
+            <v-tabs v-model="tab" color="info">
                 <v-tab value="details">
                     <v-icon class="mr-2">mdi-account</v-icon>
                     Asistente
@@ -84,7 +84,7 @@ watch(tab, () => {
             </VCardText>
 
             <VCardText v-if="loading" class="d-flex justify-center py-8 py-lg-16">
-                <v-progress-circular indeterminate aria-label="Cargando" color="primary"></v-progress-circular>
+                <v-progress-circular indeterminate aria-label="Cargando" color="info"></v-progress-circular>
             </VCardText>
         </VCard>
     </v-container>

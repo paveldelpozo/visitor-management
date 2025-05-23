@@ -3,7 +3,7 @@
     <v-icon size="64" color="error">mdi-alert-circle</v-icon>
     <h2 class="text-h5 mt-4">{{ title }}</h2>
     <p class="text-subtitle-1 mb-4">{{ message }}</p>
-    <v-btn color="primary" @click="reload">Reintentar</v-btn>
+    <v-btn color="info" @click="reload">Reintentar</v-btn>
   </v-container>
 </template>
 

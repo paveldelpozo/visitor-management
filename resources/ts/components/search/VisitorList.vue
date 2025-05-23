@@ -54,7 +54,7 @@ const updateVisitor = async (visitor: Visitor, delta: number) => {
                     </template>
                     <v-list-item-title>{{ v.name }} {{ v.surname }}</v-list-item-title>
                     <v-list-item-subtitle>
-                        <a class="text-decoration-none font-weight-bold text-primary" :href="`tel:${v.phone}`" v-if="v.phone">{{ v.phone }}</a>
+                        <a class="text-decoration-none font-weight-bold text-info" :href="`tel:${v.phone}`" v-if="v.phone">{{ v.phone }}</a>
                         <span v-if="v.phone && v.email"> / </span>
                         <span v-if="v.email">{{ v.email }}</span>
                     </v-list-item-subtitle>

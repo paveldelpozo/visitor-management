@@ -109,7 +109,7 @@ onMounted(() => {
         <v-row>
             <v-col>
                 <h1 class="text-h5 mb-4">
-                    <v-icon class="mr-2" color="primary">mdi-account-multiple</v-icon>
+                    <v-icon class="mr-2" color="info">mdi-account-multiple</v-icon>
                     Lista de asistentes
                 </h1>
 
@@ -159,7 +159,7 @@ onMounted(() => {
                         </div>
                     </template>
                     <template #item.actions="{ item }">
-                        <v-btn color="primary" icon size="x-small" class="mr-2" @click="editVisitor(item)">
+                        <v-btn color="info" icon size="x-small" class="mr-2" @click="editVisitor(item)">
                             <v-icon>mdi-pencil</v-icon>
                         </v-btn>
 

@@ -49,6 +49,6 @@ defineExpose({ search })
 <!--        <v-text-field v-model="form.name" label="Nombre" />-->
 <!--        <v-text-field v-model="form.surname" label="Apellidos" />-->
 <!--        <v-text-field v-model="form.phone" label="Teléfono" />-->
-<!--        <v-btn type="submit" color="primary">Buscar</v-btn>-->
+<!--        <v-btn type="submit" color="info">Buscar</v-btn>-->
     </v-form>
 </template>

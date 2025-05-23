@@ -33,7 +33,7 @@ async function submitLogin() {
                     <v-icon @click="type = (type === 'password' ? 'text' : 'password')">{{ type === 'password' ? 'mdi-eye' : 'mdi-eye-off' }}</v-icon>
                 </template>
             </v-text-field>
-            <v-btn block size="large" type="submit" color="primary" :loading="auth.loading">Entrar</v-btn>
+            <v-btn block size="large" type="submit" color="info" :loading="auth.loading">Entrar</v-btn>
             <v-alert v-if="auth.error" type="error" class="mt-4">{{ auth.error }}</v-alert>
         </v-form>
     </v-container>

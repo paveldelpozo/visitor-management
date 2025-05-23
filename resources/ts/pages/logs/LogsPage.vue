@@ -55,7 +55,7 @@ function formatMeta(meta: any) {
         <v-row>
             <v-col>
                 <h1 class="text-h5 mb-4">
-                    <v-icon class="mr-2" color="primary">mdi-file-document-outline</v-icon>
+                    <v-icon class="mr-2" color="info">mdi-file-document-outline</v-icon>
                     Registro de acciones
                 </h1>
 
@@ -83,7 +83,7 @@ function formatMeta(meta: any) {
                         />
                     </v-col>
                     <v-col cols="12" md="2">
-                        <v-btn @click="fetchLogs" block color="primary" class="mt-2" size="large">
+                        <v-btn @click="fetchLogs" block color="info" class="mt-2" size="large">
                             <v-icon>mdi-filter</v-icon>
                             Aplicar filtros
                         </v-btn>
