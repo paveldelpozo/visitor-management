@@ -30,7 +30,14 @@ const headers = [
 ]
 
 const fetchUsers = async () => {
-    const { data } = await useApi('get', '/api/users', { params: { search: search.value, page: page.value } })
+    const params: any = {
+        search: search.value,
+        page: page.value
+    }
+
+    const query = new URLSearchParams(params).toString()
+
+    const { data } = await useApi('get', `/api/users?${query}`)
     if (data) {
         users.value = data.data
         totalPages.value = data.last_page
@@ -91,7 +98,7 @@ async function deleteUser() {
 
 function checkQueryUser() {
     if (route.query.user) {
-        const userId = parseInt(route.query.user)
+        const userId = parseInt(route.query.user as string)
         const userToEdit = users.value.find((user: any) => user.id === userId)
         if (userToEdit) {
             openEdit(userToEdit)

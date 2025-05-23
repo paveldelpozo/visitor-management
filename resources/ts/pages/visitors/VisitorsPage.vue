@@ -35,7 +35,9 @@ async function fetchVisitors() {
         size: perPage.value,
     }
 
-    const { data, error, status } = await useApi('get', '/api/visitors', params)
+    const query = new URLSearchParams(params).toString()
+
+    const { data, error, status } = await useApi('get', `/api/visitors?${query}`)
 
     if (error) {
         catchError('Ocurrió un error al intentar obtener los asistentes.', error)

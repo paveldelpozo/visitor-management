@@ -14,7 +14,9 @@ const loading = ref(false)
 async function search() {
     loading.value = true
 
-    const { data, error, status } = await useApi('get', '/api/visitors/search', form.value)
+    const query = new URLSearchParams(form.value).toString()
+
+    const { data, error, status } = await useApi('get', `/api/visitors/search?${query}`)
 
     if (error) {
         catchError('Ocurrió un error al intentar buscar asistentes.', error)
@@ -43,8 +45,8 @@ defineExpose({ search })
             clearable
             label="Buscar asistente..."
             prepend-inner-icon="mdi-magnify"
-            @input="search"
             @keyup.enter="search"
+            @click:clear="search"
         />
     </v-form>
 </template>
