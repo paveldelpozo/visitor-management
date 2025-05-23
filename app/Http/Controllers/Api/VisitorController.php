@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Events\HeadphonesChanged;
+use App\Events\VisitorCreated;
+use App\Events\VisitorDeleted;
 use App\Events\VisitorUpdated;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\VisitorSearchRequest;
@@ -52,7 +55,7 @@ class VisitorController extends Controller
             'action' => 'Creado con ' . $visitor->headphones . ' auriculares'
         ]);
 
-        broadcast(new VisitorUpdated($visitor))->toOthers();
+        broadcast(new VisitorCreated($visitor))->toOthers();
 
         return response()->json($visitor);
     }
@@ -82,6 +85,10 @@ class VisitorController extends Controller
 
         broadcast(new VisitorUpdated($visitor))->toOthers();
 
+        if ($cambio !== 0) {
+            broadcast(new HeadphonesChanged($visitor, $cambio))->toOthers();
+        }
+
         return response()->json($visitor);
     }
 
@@ -93,7 +100,11 @@ class VisitorController extends Controller
             return response()->json(['message' => 'Visitor not found'], 404);
         }
 
+        $visitorId = $visitor->id;
+
         $visitor->delete();
+
+        broadcast(new VisitorDeleted($visitorId))->toOthers();
 
         return response()->json(['message' => 'Visitor deleted successfully']);
     }

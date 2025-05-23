@@ -1,6 +1,6 @@
 # Visitor Management App
 
-Aplicación web para gestión de visitantes con Laravel + Vue 3 + Vuetify + Reverb + Sanctum.
+Aplicación web para gestión de Asistentes con Laravel + Vue 3 + Vuetify + Reverb + Sanctum.
 
 ## 📦 Requisitos
 
@@ -59,7 +59,7 @@ Abre `http://localhost:8000` en el navegador.
 
 - Autenticación con Laravel Sanctum
 - SPA en Vue 3 con Vuetify
-- Gestión de visitantes (crear, editar, buscar)
+- Gestión de Asistentes (crear, editar, buscar)
 - Sistema de préstamo de auriculares
 - Actualización en tiempo real con Laravel 11 + Reverb
 - Registro de logs de actividad

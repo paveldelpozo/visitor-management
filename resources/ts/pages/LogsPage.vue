@@ -14,7 +14,7 @@ const filters = ref({
 
 const headers = [
     { title: 'Usuario', value: 'user' },
-    { title: 'Visitante', value: 'visitor' },
+    { title: 'Asistente', value: 'visitor' },
     { title: 'Acción', value: 'action' },
     { title: 'Fecha', value: 'created_at' },
     { title: 'Meta', value: 'meta' },

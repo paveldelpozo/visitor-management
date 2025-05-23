@@ -3,12 +3,6 @@ import type { Visitor } from '@/types/visitor'
 import axios from 'axios'
 import {ref} from 'vue'
 
-Echo.channel('visitors')
-    .listen('.updated', (e: any) => {
-        console.log('Actualización en tiempo real:', e.visitor)
-        // Puedes emitir un evento, recargar datos, etc.
-    })
-
 defineProps<{ visitors: Visitor[] }>()
 const emit = defineEmits(['select', 'refresh'])
 
@@ -23,14 +17,25 @@ const removeVisitor = async (visitor: Visitor, isActive: any) => {
         const response = await axios.delete(`/api/visitors/${visitor.id}`)
         if (response.status === 200) {
             isActive.value = false
-            emit('refresh') // Emitir evento para refrescar la lista de visitantes
+            emit('refresh') // Emitir evento para refrescar la lista de asistentes
         }
     } catch (error) {
-        errorDeleting.value = 'Error al eliminar el visitante. Por favor, inténtalo de nuevo más tarde.'
-        console.error('Error al eliminar el visitante:', error)
+        errorDeleting.value = 'Error al eliminar el asistente. Por favor, inténtalo de nuevo más tarde.'
+        console.error('Error al eliminar el asistente:', error)
     }
 
     deleting.value = false
+}
+
+const updateVisitor = async (visitor: Visitor, delta: number) => {
+    visitor.headphones += delta
+
+    try {
+        await axios.put(`/api/visitors/${visitor.id}`,  visitor)
+    } catch (error) {
+        console.error('Error al actualizar el asistente:', error)
+        visitor.headphones -= delta
+    }
 }
 </script>
 
@@ -45,25 +50,37 @@ const removeVisitor = async (visitor: Visitor, isActive: any) => {
                 <v-divider v-if="i > 0" />
                 <v-list-item @click="() => emit('select', v)">
                     <template #prepend>
-                        <v-avatar size="40" class="mr-2" icon="mdi-account" />
+                        <v-icon size="36" icon="mdi-account" />
                     </template>
                     <v-list-item-title>{{ v.name }} {{ v.surname }}</v-list-item-title>
-                    <v-list-item-subtitle>{{ v.phone }}</v-list-item-subtitle>
+                    <v-list-item-subtitle>
+                        <a class="text-decoration-none font-weight-bold text-primary" :href="`tel:${v.phone}`" v-if="v.phone">{{ v.phone }}</a>
+                        <span v-if="v.phone && v.email"> / </span>
+                        <span v-if="v.email">{{ v.email }}</span>
+                    </v-list-item-subtitle>
                     <template #append>
+                        <v-btn icon color="info" size="x-small" class="mr-2" @click.stop="updateVisitor(v, -1)">
+                            <v-icon>mdi-minus</v-icon>
+                        </v-btn>
+
                         <VIcon class="mr-2">mdi-headphones</VIcon>
                         <span>{{ v.headphones }}</span>
 
+                        <v-btn icon color="info" size="x-small" class=mx-2 @click.stop="updateVisitor(v, 1)">
+                            <v-icon>mdi-plus</v-icon>
+                        </v-btn>
+
                         <v-dialog max-width="500">
                             <template v-slot:activator="{ props: activatorProps }">
-                                <v-btn icon size="x-small" color="error" class="ml-2" v-bind="activatorProps" :loading="deleting">
+                                <v-btn icon size="x-small" color="error" v-bind="activatorProps" :loading="deleting">
                                     <v-icon>mdi-delete</v-icon>
                                 </v-btn>
                             </template>
 
                             <template v-slot:default="{ isActive }">
-                                <v-card title="Borrar visitante">
+                                <v-card title="Borrar asistente">
                                     <v-card-text>
-                                        ¿Estás seguro de que deseas eliminar a este visitante: <strong>{{ v.name }} {{ v.surname }}</strong>?
+                                        ¿Estás seguro de que deseas eliminar a este asistente: <strong>{{ v.name }} {{ v.surname }}</strong>?
                                     </v-card-text>
 
                                     <v-card-text v-if="errorDeleting">
@@ -99,3 +116,9 @@ const removeVisitor = async (visitor: Visitor, isActive: any) => {
         </v-list>
     </div>
 </template>
+
+<style>
+.v-list-item__spacer {
+    width: 16px!important;
+}
+</style>

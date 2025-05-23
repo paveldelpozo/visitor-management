@@ -1,5 +1,9 @@
 <template>
     <v-container>
+        <div class="d-flex justify-center">
+            <v-img src="/img/seonthebeach_logo.png" max-width="50%" min-width="320"></v-img>
+        </div>
+
         <h1>Iniciar sesión</h1>
         <v-form @submit.prevent="submitLogin">
             <v-text-field autocomplete="email" variant="solo" v-model="email" label="Email" />

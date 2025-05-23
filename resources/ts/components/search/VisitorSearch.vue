@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {onMounted, ref} from 'vue'
+import {onMounted, ref, watch} from 'vue'
 import axios from 'axios'
 
 const form = ref({
@@ -9,14 +9,25 @@ const form = ref({
     // phone: ''
 })
 
-const emitResults = defineEmits(['results'])
+const emitResults = defineEmits(['results', 'loading'])
+
+const loading = ref(false)
 
 async function search() {
+    loading.value = true
+
     const { data } = await axios.get('/api/visitors/search', {
         params: form.value
     })
+
     emitResults('results', data)
+
+    loading.value = false
 }
+
+watch(loading, () => {
+    emitResults('loading', loading.value)
+})
 
 onMounted(search)
 

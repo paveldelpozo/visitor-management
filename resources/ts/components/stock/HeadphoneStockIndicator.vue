@@ -3,12 +3,6 @@ import { ref, onMounted } from 'vue'
 import axios from 'axios'
 import type { HeadphoneStock } from '@/types/visitor'
 
-Echo.channel('visitors')
-    .listen('.updated', (e: any) => {
-        console.log('Actualización en tiempo real:', e.visitor)
-        // Puedes emitir un evento, recargar datos, etc.
-    })
-
 const stock = ref<HeadphoneStock>()
 
 async function loadStock() {
@@ -20,10 +14,18 @@ onMounted(loadStock)
 </script>
 
 <template>
-    <v-card color="blue-lighten-3" class="pa-2">
+    <v-card color="info" class="pa-2">
         <v-card-title class="text-h5">
-            <v-icon size="28" class="mr-2">mdi-headphones</v-icon>
-            <strong>Auriculares</strong>: {{ stock?.used }} / {{ stock?.total }} (<strong>Libres</strong>: {{ stock?.available }})
+            <v-row dense>
+                <v-col cols="12" md="6" class="d-flex justify-md-start align-center">
+                    <v-icon size="28" class="mr-2">mdi-headphones</v-icon>
+                    <strong>Auriculares</strong>:
+                    {{ stock?.used }} / {{ stock?.total }}
+                </v-col>
+                <v-col cols="12" md="6" class="d-flex justify-md-end align-center">
+                    (<strong>Libres</strong>: {{ stock?.available }})
+                </v-col>
+            </v-row>
         </v-card-title>
     </v-card>
 </template>

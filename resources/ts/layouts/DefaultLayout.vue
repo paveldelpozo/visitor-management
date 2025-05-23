@@ -46,9 +46,9 @@ async function logout() {
 
         <v-app-bar app color="primary" dark>
             <v-app-bar-nav-icon v-if="user" @click="drawer = !drawer" />
-            <v-toolbar-title>
-                <VIcon>mdi-headphones</VIcon>
-                SEOnTheBeach Visitor manager
+            <v-toolbar-title @click="router.push('/')" style="cursor: pointer">
+                <VIcon>mdi-umbrella-beach</VIcon>
+                SEonTheBeach | Gestión de Auriculares
             </v-toolbar-title>
             <v-spacer />
             <v-btn v-if="user" text icon @click="logout" title="Cerrar sesión">

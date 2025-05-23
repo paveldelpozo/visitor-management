@@ -29,6 +29,6 @@ class VisitorUpdated implements ShouldBroadcast
 
     public function broadcastAs(): string
     {
-        return 'updated';
+        return 'visitors.updated';
     }
 }
