@@ -39,6 +39,13 @@ php artisan reverb:start --host=0.0.0.0 --port=$PORT_REVERB > /dev/null 2>&1 &
 # Vite frontend
 pnpm run dev:vite -- --host=0.0.0.0 --port=$PORT_VITE > /dev/null 2>&1 &
 
+if command -v qrencode &> /dev/null; then
+    echo ""
+    echo "Código QR (Frontend):"
+    echo ""
+    echo "http://$LAN_IP:$PORT_LARAVEL" | qrencode -t UTF8 -m 2
+    echo ""
+fi
 echo ""
 echo "🛑 Pulsa Ctrl+C para detener todos los servicios de forma segura."
 echo ""
