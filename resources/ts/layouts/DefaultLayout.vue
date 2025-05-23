@@ -18,7 +18,7 @@ async function logout() {
         await auth.logout()
         message.value = 'Sesión cerrada correctamente'
         snackbar.value = true
-        setTimeout(() => router.push('/login'), 1000)
+        setTimeout(() => router.push({ name: 'login' }), 1000)
     } catch (e) {
         console.error('Error al cerrar sesión:', e)
     }
@@ -29,19 +29,19 @@ async function logout() {
     <v-app>
         <v-navigation-drawer v-if="user" v-model="drawer" app temporary>
             <v-list>
-                <v-list-item link to="/">
+                <v-list-item link :to="{ name: 'home' }">
                     <template #prepend><v-icon>mdi-home</v-icon></template>
                     <v-list-item-title>Inicio</v-list-item-title>
                 </v-list-item>
-                <v-list-item to="/visitors">
+                <v-list-item :to="{ name: 'visitor.index' }">
                     <template #prepend><v-icon>mdi-account-multiple</v-icon></template>
                     <v-list-item-title>Asistentes</v-list-item-title>
                 </v-list-item>
-                <v-list-item link to="/create">
+                <v-list-item link :to="{ name: 'visitor.create' }">
                     <template #prepend><v-icon>mdi-account-plus</v-icon></template>
                     <v-list-item-title>Nuevo asistente</v-list-item-title>
                 </v-list-item>
-                <v-list-item link to="/logs">
+                <v-list-item link :to="{ name: 'logs' }">
                     <template #prepend><v-icon>mdi-file-document-outline</v-icon></template>
                     <v-list-item-title>Registro de acciones</v-list-item-title>
                 </v-list-item>
@@ -50,7 +50,7 @@ async function logout() {
 
         <v-app-bar app color="primary" dark>
             <v-app-bar-nav-icon v-if="user" @click="drawer = !drawer" />
-            <v-toolbar-title @click="router.push('/')" style="cursor: pointer" class="d-flex align-center">
+            <v-toolbar-title @click="router.push({ name: 'home' })" style="cursor: pointer" class="d-flex align-center">
                 <VIcon size="small">mdi-umbrella-beach</VIcon>
                 SEonTheBeach | Gestión de Auriculares
             </v-toolbar-title>

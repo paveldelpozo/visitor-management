@@ -96,7 +96,7 @@ function formatMeta(meta: any) {
                     :items-per-page="25"
                     :loading="loading"
                     class="elevation-1"
-                    @click:row="(event: any, item: any) => router.push(`/edit/${item.item.visitor_id}`)"
+                    @click:row="(event: any, item: any) => router.push({ name: 'visitor.edit', params: { id: item.visitor.id } })"
                 >
                     <template #item.user="{ item }">
                         {{ item.user?.name ?? '-' }}

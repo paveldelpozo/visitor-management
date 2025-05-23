@@ -1,20 +1,19 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 import { useAuthStore } from '@/store/auth'
-import { createPinia } from 'pinia'
 import { createApp, getCurrentInstance } from 'vue'
-import SearchPage from '@/pages/SearchPage.vue'
-import EditVisitorPage from '@/pages/EditVisitorPage.vue'
-import CreateVisitorPage from '@/pages/CreateVisitorPage.vue'
-import LogsPage from '@/pages/LogsPage.vue'
+import IndexPage from '@/pages/IndexPage.vue'
+import EditVisitorPage from '@/pages/visitors/EditVisitorPage.vue'
+import CreateVisitorPage from '@/pages/visitors/CreateVisitorPage.vue'
+import LogsPage from '@/pages/logs/LogsPage.vue'
 
 const routes: RouteRecordRaw[] = [
-    { path: '/', name: 'search', component: SearchPage, meta: { requiresAuth: true } },
-    { path: '/edit/:id', name: 'edit', component: EditVisitorPage, props: true, meta: { requiresAuth: true } },
-    { path: '/create', name: 'create', component: CreateVisitorPage, meta: { requiresAuth: true } },
+    { path: '/', name: 'home', component: IndexPage, meta: { requiresAuth: true } },
+    { path: '/visitors', name: 'visitor.index', component: () => import('@/pages/visitors/VisitorsPage.vue'), meta: { requiresAuth: true } },
+    { path: '/visitors/create', name: 'visitor.create', component: CreateVisitorPage, meta: { requiresAuth: true } },
+    { path: '/visitors/:id', name: 'visitor.edit', component: EditVisitorPage, props: true, meta: { requiresAuth: true } },
     { path: '/logs', name: 'logs', component: LogsPage, meta: { requiresAuth: true } },
     { path: '/login', name: 'login', component: () => import('@/pages/LoginPage.vue') },
     { path: '/error', name: 'error', component: () => import('@/components/ui/ErrorScreen.vue') },
-    { path: '/visitors', name: 'visitor.index', component: () => import('@/pages/VisitorsPage.vue'), meta: { requiresAuth: true } },
     { path: '/:pathMatch(.*)*', name: 'not-found', component: () => import('@/pages/NotFoundPage.vue') }
 ]
 
@@ -27,10 +26,6 @@ let isLoadingUser = false
 
 router.beforeEach(async (to, from, next) => {
     const app = getCurrentInstance()?.appContext.app || createApp({})
-
-    // if (!app._context?.plugins.some(p => p === createPinia)) {
-    //     app.use(createPinia())
-    // }
 
     const auth = useAuthStore()
 

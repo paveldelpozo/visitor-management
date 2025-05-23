@@ -50,7 +50,7 @@ async function submit() {
     } else {
         await axios.put(`/api/visitors/${props.visitor?.id}`, form.value)
     }
-    await router.push('/')
+    await router.push({ name: 'home' })
 }
 </script>
 

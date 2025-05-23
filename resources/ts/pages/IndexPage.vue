@@ -14,16 +14,16 @@ const router = useRouter()
 
 function handleResults(result: any) {
     if (result.status === 'single') {
-        router.push(`/edit/${result.visitor.id}`)
+        router.push({ name: 'visitor.edit', params: { id: result.visitor.id } })
     } else if (result.status === 'multiple') {
         visitors.value = result.visitors
     } else {
-        router.push('/create')
+        router.push({ name: 'visitor.create' })
     }
 }
 
 function goToEdit(visitor: Visitor) {
-    router.push(`/edit/${visitor.id}`)
+    router.push({ name: 'visitor.edit', params: { id: visitor.id } })
 }
 
 onMounted(() => {
@@ -47,9 +47,9 @@ onMounted(() => {
 </script>
 
 <template>
-    <v-container class="text-center">
+    <v-container fluid class="text-center">
         <div class="d-flex justify-center">
-            <v-img src="/img/seonthebeach_logo.png" max-width="50%" min-width="320"></v-img>
+            <v-img src="/img/seonthebeach_logo.png" max-width="30%" min-width="320"></v-img>
         </div>
 
         <h1 class="text-h5 font-weight-bold my-6">Gestión de Auriculares</h1>
