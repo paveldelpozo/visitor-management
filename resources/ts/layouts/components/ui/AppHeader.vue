@@ -19,15 +19,16 @@ const emit = defineEmits(['toggle-theme', 'logout', 'toggle-drawer'])
     <v-app-bar app color="info">
         <v-app-bar-nav-icon @click="emit('toggle-drawer')" />
 
-        <v-toolbar-title @click="router.push({ name: 'home' })" style="cursor: pointer" class="d-none d-md-flex align-center">
-            Gestión de Auriculares
+        <v-toolbar-title @click="router.push({ name: 'home' })" style="cursor: pointer" class="d-flex align-center">
+            <v-icon>mdi-home</v-icon>
+            <span class="d-none d-md-inline-block ml-2">Gestión de Auriculares</span>
         </v-toolbar-title>
 
         <v-spacer />
 
-        <v-btn variant="outlined" class="d-flex align-center" link :to="{ name: 'users.index', query: { user: user.id } }">
-            <v-icon class="mr-2">mdi-account-circle</v-icon>
-            <strong>{{ props.user?.name }}</strong>
+        <v-btn variant="outlined" class="d-flex align-center" :disabled="props.user.roles[0].name !== 'admin'" link :to="{ name: 'users.index', query: { user: user.id } }">
+            <v-icon>mdi-account-circle</v-icon>
+            <strong class="d-none d-md-inline-block ml-2">{{ props.user?.name }}</strong>
         </v-btn>
 
         <v-btn icon @click="qrRef?.openDialog()" title="Mostrar QR">

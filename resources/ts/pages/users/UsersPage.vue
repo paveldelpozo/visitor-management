@@ -71,7 +71,7 @@ async function saveUser(userData: any) {
     closeDialog()
     await fetchUsers()
 
-    if (user.value.id === editedUser.value.id && userData.password && userData.password_confirmation) {
+    if (user.value?.id === editedUser.value.id && userData.password && userData.password_confirmation) {
         await logout()
     }
 }
