@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\ClientLogController;
 use App\Http\Controllers\Api\HeadphoneStockController;
+use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\VisitorController;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -48,19 +49,31 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/visitors/search', [VisitorController::class, 'search']);
-    Route::get('/visitors/export', [VisitorController::class, 'export']); //->middleware('role:admin');
-    Route::get('/visitors', [VisitorController::class, 'index']);
-    Route::post('/visitors', [VisitorController::class, 'store']);
-    Route::get('/visitors/{visitor}', [VisitorController::class, 'show']);
-    Route::put('/visitors/{visitor}', [VisitorController::class, 'update']);
-    Route::delete('/visitors/{id}', [VisitorController::class, 'destroy']);
-    Route::get('/visitors/{visitor}/logs', [VisitorController::class, 'logs']);
+Route::middleware('auth:sanctum')->prefix('visitors')->group(function () {
+    Route::get('/search', [VisitorController::class, 'search']);
+    Route::get('/export', [VisitorController::class, 'export']); //->middleware('role:admin');
+    Route::get('', [VisitorController::class, 'index']);
+    Route::post('', [VisitorController::class, 'store']);
+    Route::get('/{visitor}', [VisitorController::class, 'show']);
+    Route::put('/{visitor}', [VisitorController::class, 'update']);
+    Route::delete('/{id}', [VisitorController::class, 'destroy']);
+    Route::get('/{visitor}/logs', [VisitorController::class, 'logs']);
+});
 
+Route::middleware('auth:sanctum')->prefix('stock')->group(function () {
     Route::get('/stock', [HeadphoneStockController::class, 'show']); //->middleware('role:admin');
     Route::put('/stock', [HeadphoneStockController::class, 'update']); //->middleware('role:admin');
+});
 
+Route::middleware('auth:sanctum')->group(function () {
     Route::get('/logs', [ClientLogController::class, 'index']);
     Route::post('/log-client-error', [ClientLogController::class, 'store']);
+});
+
+Route::middleware('auth:sanctum')->prefix('users')->group(function () {
+    Route::get('/', [UserController::class, 'index']); //->middleware('role:admin');
+    Route::post('/', [UserController::class, 'store']); //->middleware('role:admin');
+    Route::get('{user}', [UserController::class, 'show']); //->middleware('role:admin');
+    Route::put('{user}', [UserController::class, 'update']); //->middleware('role:admin');
+    Route::delete('{user}', [UserController::class, 'destroy']); //->middleware('role:admin');
 });

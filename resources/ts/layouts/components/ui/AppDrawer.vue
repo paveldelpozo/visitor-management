@@ -31,6 +31,10 @@ watch(drawerValue, (value: any) => emit('update:drawer', value))
                 <template #prepend><v-icon>mdi-account-plus</v-icon></template>
                 <v-list-item-title>Nuevo asistente</v-list-item-title>
             </v-list-item>
+            <v-list-item link :to="{ name: 'users.index' }">
+                <template #prepend><v-icon>mdi-account-cog</v-icon></template>
+                <v-list-item-title>Usuarios</v-list-item-title>
+            </v-list-item>
             <v-list-item link :to="{ name: 'logs' }">
                 <template #prepend><v-icon>mdi-file-document-outline</v-icon></template>
                 <v-list-item-title>Registro de acciones</v-list-item-title>

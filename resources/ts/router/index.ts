@@ -5,6 +5,7 @@ import IndexPage from '@/pages/IndexPage.vue'
 import EditVisitorPage from '@/pages/visitors/EditVisitorPage.vue'
 import CreateVisitorPage from '@/pages/visitors/CreateVisitorPage.vue'
 import LogsPage from '@/pages/logs/LogsPage.vue'
+import UsersPage from "@/pages/users/UsersPage.vue";
 
 const routes: RouteRecordRaw[] = [
     { path: '/', name: 'home', component: IndexPage, meta: { requiresAuth: true } },
@@ -13,6 +14,7 @@ const routes: RouteRecordRaw[] = [
     { path: '/visitors/:id', name: 'visitor.edit', component: EditVisitorPage, props: true, meta: { requiresAuth: true } },
     { path: '/logs', name: 'logs', component: LogsPage, meta: { requiresAuth: true } },
     { path: '/login', name: 'login', component: () => import('@/pages/LoginPage.vue') },
+    { path: '/users', name: 'users.index', component: UsersPage },
     { path: '/error', name: 'error', component: () => import('@/components/ui/ErrorScreen.vue') },
     { path: '/:pathMatch(.*)*', name: 'not-found', component: () => import('@/pages/NotFoundPage.vue') }
 ]
