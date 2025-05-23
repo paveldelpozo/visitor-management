@@ -1,9 +1,14 @@
 <script setup lang="ts">
+import { storeToRefs } from "pinia";
 import { ref, onMounted, watch } from 'vue'
 import { useApi } from '@/composables/useApi'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import UserForm from "@/components/forms/UserForm.vue";
 import ConfirmDialog from "@/components/ui/ConfirmDialog.vue";
+import { useAuthStore } from '@/store/auth'
+
+const route = useRoute()
+const router = useRouter()
 
 const users = ref<any[]>([])
 const search = ref('')
@@ -13,7 +18,9 @@ const editedUser = ref<any | null>(null)
 const userToDelete = ref<any | null>(null)
 const page = ref(1)
 const totalPages = ref(1)
-const router = useRouter()
+
+const auth = useAuthStore()
+const { user } = storeToRefs(useAuthStore())
 
 const headers = [
     { title: 'Nombre', value: 'name' },
@@ -30,12 +37,10 @@ const fetchUsers = async () => {
     }
 }
 
-watch([search, page], fetchUsers)
-onMounted(fetchUsers)
-
-function openEdit(user: any) {
-    editedUser.value = { ...user, password: '', password_confirmation: '' }
+function openEdit(userData: any) {
+    editedUser.value = { ...userData, password: '', password_confirmation: '' }
     dialog.value = true
+    router.push({ query: { user: editedUser.value.id } })
 }
 
 function openCreate() {
@@ -43,14 +48,32 @@ function openCreate() {
     dialog.value = true
 }
 
-async function saveUser(user: any) {
-    if (editedUser.value?.id) {
-        await useApi('put', `/api/users/${editedUser.value.id}`, user)
-    } else {
-        await useApi('post', '/api/users', user)
-    }
+function closeDialog() {
     dialog.value = false
+    router.push({ query: {} })
+}
+
+async function logout() {
+    try {
+        await auth.logout()
+        setTimeout(() => router.push({ name: 'login' }), 50)
+    } catch (e) {
+        console.error('Error al cerrar sesión:', e)
+    }
+}
+
+async function saveUser(userData: any) {
+    if (editedUser.value?.id) {
+        await useApi('put', `/api/users/${editedUser.value.id}`, userData)
+    } else {
+        await useApi('post', '/api/users', userData)
+    }
+    closeDialog()
     await fetchUsers()
+
+    if (user.value.id === editedUser.value.id && userData.password && userData.password_confirmation) {
+        await logout()
+    }
 }
 
 function confirmDelete(user: any) {
@@ -61,10 +84,32 @@ function confirmDelete(user: any) {
 async function deleteUser() {
     if (userToDelete.value) {
         await useApi('delete', `/api/users/${userToDelete.value.id}`)
-        dialogDelete.value = false
+        closeDialog()
         await fetchUsers()
     }
 }
+
+function checkQueryUser() {
+    if (route.query.user) {
+        const userId = parseInt(route.query.user)
+        const userToEdit = users.value.find((user: any) => user.id === userId)
+        if (userToEdit) {
+            openEdit(userToEdit)
+        }
+    }
+}
+
+watch([search, page], fetchUsers)
+
+watch(() => route.query, () => {
+    checkQueryUser()
+})
+
+onMounted(async () => {
+    await fetchUsers()
+
+    checkQueryUser()
+})
 </script>
 
 <template>
@@ -99,13 +144,13 @@ async function deleteUser() {
 
         <v-pagination v-model="page" :length="totalPages" class="my-4" />
 
-        <UserForm :open="dialog" :user="editedUser" @submit="saveUser" @close="dialog = false" />
+        <UserForm :open="dialog" :user="editedUser" @submit="saveUser" @close="closeDialog" />
 
         <ConfirmDialog
             :open="dialogDelete"
             :message="`Esta acción eliminará al usuario ${userToDelete?.name}`"
             @confirm="deleteUser"
-            @close="dialogDelete = false"
+            @close="closeDialog"
         />
     </v-container>
 </template>

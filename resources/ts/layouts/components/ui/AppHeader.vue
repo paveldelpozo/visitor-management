@@ -25,10 +25,10 @@ const emit = defineEmits(['toggle-theme', 'logout', 'toggle-drawer'])
 
         <v-spacer />
 
-        <span class="d-flex align-center rounded px-2 py-1 mr-2" style="border: solid 2px #fff;">
+        <v-btn variant="outlined" class="d-flex align-center" link :to="{ name: 'users.index', query: { user: user.id } }">
             <v-icon class="mr-2">mdi-account-circle</v-icon>
             <strong>{{ props.user?.name }}</strong>
-        </span>
+        </v-btn>
 
         <v-btn icon @click="qrRef?.openDialog()" title="Mostrar QR">
             <v-icon>mdi-qrcode</v-icon>

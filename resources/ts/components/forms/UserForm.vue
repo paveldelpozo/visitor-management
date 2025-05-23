@@ -21,7 +21,7 @@ watch(() => props.user, (val) => {
         form.value = {
             name: val.name,
             email: val.email,
-            role: val.role,
+            role: val.roles[0]?.name || 'user',
             password: '',
             password_confirmation: ''
         }
@@ -37,25 +37,28 @@ function handleSubmit() {
 
 <template>
     <v-dialog :model-value="props.open" max-width="500" @update:modelValue="emit('close')">
-        <v-card>
-            <v-card-title class="text-h6">{{ props.user ? 'Editar usuario' : 'Nuevo usuario' }}</v-card-title>
-            <v-card-text>
-                <v-text-field v-model="form.name" label="Nombre" required />
-                <v-text-field v-model="form.email" label="Email" type="email" required />
-                <v-select
-                    v-model="form.role"
-                    :items="['admin', 'user']"
-                    label="Rol"
-                    required
-                />
-                <v-text-field v-model="form.password" label="Contraseña" type="password" :required="!props.user" />
-                <v-text-field v-model="form.password_confirmation" label="Confirmar contraseña" type="password" :required="!props.user" />
-            </v-card-text>
-            <v-card-actions>
-                <v-spacer />
-                <v-btn @click="emit('close')">Cancelar</v-btn>
-                <v-btn color="primary" @click="handleSubmit">Guardar</v-btn>
-            </v-card-actions>
-        </v-card>
+        <v-form @submit.prevent="handleSubmit">
+            <v-card>
+                <v-card-title class="text-h6 bg-info">{{ props.user ? 'Editar usuario' : 'Nuevo usuario' }}</v-card-title>
+                <v-card-text>
+                    <v-text-field autofocus variant="solo" v-model="form.name" label="Nombre" required />
+                    <v-text-field variant="solo" v-model="form.email" label="Email" type="email" required />
+                    <v-select
+                        variant="solo"
+                        v-model="form.role"
+                        :items="['admin', 'user']"
+                        label="Rol"
+                        required
+                    />
+                    <v-text-field variant="solo" v-model="form.password" autocomplete="password" label="Contraseña" type="password" :required="!props.user" />
+                    <v-text-field variant="solo" v-model="form.password_confirmation" autocomplete="password" label="Confirmar contraseña" type="password" :required="!props.user" />
+                </v-card-text>
+                <v-card-actions>
+                    <v-spacer />
+                    <v-btn @click="emit('close')">Cancelar</v-btn>
+                    <v-btn color="info" variant="flat" type="submit">Guardar</v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-form>
     </v-dialog>
 </template>

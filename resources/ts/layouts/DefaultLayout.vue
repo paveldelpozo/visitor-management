@@ -26,7 +26,7 @@ async function logout() {
         await auth.logout()
         message.value = 'Sesión cerrada correctamente'
         snackbar.value = true
-        setTimeout(() => router.push({ name: 'login' }), 1000)
+        setTimeout(() => router.push({ name: 'login' }), 50)
     } catch (e) {
         console.error('Error al cerrar sesión:', e)
     }
