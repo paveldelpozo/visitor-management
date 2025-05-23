@@ -1,12 +1,10 @@
 <script setup lang="ts">
 import {onMounted, ref, watch} from 'vue'
-import axios from '@/axios'
+import { useApi } from "@/composables/useApi";
+import { catchError } from "@/lib/catchErrors";
 
 const form = ref({
     search: '',
-    // name: '',
-    // surname: '',
-    // phone: ''
 })
 
 const emitResults = defineEmits(['results', 'loading'])
@@ -16,11 +14,13 @@ const loading = ref(false)
 async function search() {
     loading.value = true
 
-    const { data } = await axios.get('/api/visitors/search', {
-        params: form.value
-    })
+    const { data, error, status } = await useApi('get', '/api/visitors/search', form.value)
 
-    emitResults('results', data)
+    if (error) {
+        catchError('Ocurrió un error al intentar buscar asistentes.', error)
+    } else {
+        emitResults('results', data)
+    }
 
     loading.value = false
 }
@@ -46,9 +46,5 @@ defineExpose({ search })
             @input="search"
             @keyup.enter="search"
         />
-<!--        <v-text-field v-model="form.name" label="Nombre" />-->
-<!--        <v-text-field v-model="form.surname" label="Apellidos" />-->
-<!--        <v-text-field v-model="form.phone" label="Teléfono" />-->
-<!--        <v-btn type="submit" color="info">Buscar</v-btn>-->
     </v-form>
 </template>

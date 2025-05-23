@@ -1,13 +1,14 @@
 <script setup lang="ts">
 import {onMounted, ref} from 'vue'
 import { useRouter } from 'vue-router'
+import { echo } from '@/echo'
 import VisitorSearch from '@/components/search/VisitorSearch.vue'
 import VisitorList from '@/components/search/VisitorList.vue'
 import HeadphoneStockIndicator from '@/components/stock/HeadphoneStockIndicator.vue'
 import type { Visitor } from '@/types/visitor'
-import { echo } from '@/echo'
 
-const visitorSearch = ref<InstanceType<typeof VisitorSearch>>()
+const visitorSearchRef = ref<InstanceType<typeof VisitorSearch>>()
+const headphoneStockIndicatorRef = ref<InstanceType<typeof HeadphoneStockIndicator>>()
 const loading = ref(false)
 const visitors = ref<Visitor[]>([])
 const router = useRouter()
@@ -30,18 +31,8 @@ onMounted(() => {
     echo.channel('visitors')
         .listenToAll((e: any) => {
             console.log('Evento recibido:', e)
-        })
-        .listen('.visitors.created', (e: any) => {
-            visitorSearch.value?.search()
-        })
-        .listen('.visitors.updated', (e: any) => {
-            visitorSearch.value?.search()
-        })
-        .listen('.visitors.deleted', (e: any) => {
-            visitorSearch.value?.search()
-        })
-        .listen('.visitors.headphones.changed', (e: any) => {
-            visitorSearch.value?.search()
+            visitorSearchRef.value?.search()
+            headphoneStockIndicatorRef.value?.loadStock()
         })
 })
 </script>
@@ -54,15 +45,15 @@ onMounted(() => {
 
         <h1 class="text-h5 font-weight-bold my-6">Gestión de Auriculares</h1>
 
-        <HeadphoneStockIndicator class="my-4" />
-
-        <VisitorSearch ref="visitorSearch" @results="handleResults" @loading="(value) => loading = value" />
+        <VisitorSearch ref="visitorSearchRef" @results="handleResults" @loading="(value) => loading = value" />
 
         <VisitorList
             v-if="visitors.length > 1 && !loading"
             :visitors="visitors"
             @select="goToEdit"
-            @refresh="visitorSearch?.search()"
+            @refresh="visitorSearchRef?.search()"
         />
+
+        <HeadphoneStockIndicator ref="headphoneStockIndicatorRef" class="my-4" />
     </v-container>
 </template>

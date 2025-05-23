@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import axios from '@/axios'
-import {useRouter} from "vue-router";
+import { useRouter } from "vue-router";
+import { useApi } from "@/composables/useApi";
+import { catchError } from "@/lib/catchErrors";
 
 const router = useRouter()
 
@@ -33,14 +34,15 @@ async function fetchLogs() {
 
     const queryString = new URLSearchParams(params).toString()
 
-    try {
-        const { data } = await axios.get(`/api/logs?${queryString}`)
+    const { data, error, status } = await useApi('get', `/api/logs?${queryString}`)
+
+    if (error) {
+        catchError('Ocurrió un error al intentar obtener los registros.', error)
+    } else {
         logs.value = data.data
-    } catch (error) {
-        console.error('Error cargando logs:', error)
-    } finally {
-        loading.value = false
     }
+
+    loading.value = false
 }
 
 onMounted(fetchLogs)

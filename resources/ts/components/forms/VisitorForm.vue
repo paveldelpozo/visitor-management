@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 import type { Visitor } from '@/types/visitor'
-import axios from '@/axios'
 import { useRouter } from 'vue-router'
+import { useApi } from "@/composables/useApi";
+import { catchError } from "@/lib/catchErrors";
 
 const props = defineProps<{
     visitor?: Visitor
@@ -39,16 +40,31 @@ watch(form, () => {
     if (props.isEdit) update()
 })
 
+async function create() {
+    const { data, error, status } = await useApi('post', '/api/visitors', form.value)
+
+    if (error) {
+        catchError('Se produjo un error al intentar crear el nuevo asistente', error)
+    } else {
+        emit('updated')
+    }
+}
+
 async function update() {
-    await axios.put(`/api/visitors/${props.visitor?.id}`, form.value)
-    emit('updated')
+    const { data, error, status } = await useApi('put', `/api/visitors/${props.visitor?.id}`, form.value)
+
+    if (error) {
+        catchError('Se produjo un error al intentar actualizar al asistente', error)
+    } else {
+        emit('updated')
+    }
 }
 
 async function submit() {
     if (!props.isEdit) {
-        await axios.post('/api/visitors', form.value)
+        await create()
     } else {
-        await axios.put(`/api/visitors/${props.visitor?.id}`, form.value)
+        await update()
     }
     await router.push({ name: 'home' })
 }
@@ -65,7 +81,7 @@ async function submit() {
 
         <div class="d-flex justify-center my-4 mb-8">
             <div class="d-flex align-center pa-2 border rounded-lg elevation-2">
-                <v-btn color="info" size="x-large" @click="decrease" :disabled="form?.headphones <= 0" height="60">
+                <v-btn color="info" size="x-large" @click="decrease" :disabled="(form?.headphones ?? 0) <= 0" height="60">
                     <v-icon>mdi-minus</v-icon>
                 </v-btn>
 
@@ -73,7 +89,7 @@ async function submit() {
                     {{ form?.headphones }}
                 </div>
 
-                <v-btn color="info" size="x-large" @click="increase" :disabled="form?.headphones >= 2" height="60">
+                <v-btn color="info" size="x-large" @click="increase" :disabled="(form?.headphones ?? 0) >= 2" height="60">
                     <v-icon>mdi-plus</v-icon>
                 </v-btn>
             </div>

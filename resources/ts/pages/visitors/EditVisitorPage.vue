@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import {onMounted, ref, watch} from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import axios from '@/axios'
 import type { Visitor } from '@/types/visitor'
 import VisitorForm from '@/components/forms/VisitorForm.vue'
 import VisitorLogTable from '@/components/logs/VisitorLogTable.vue'
 import { echo } from '@/echo'
+import { useApi } from "@/composables/useApi";
+import { catchError } from "@/lib/catchErrors";
 
 const route = useRoute()
 const router = useRouter()
@@ -16,8 +17,15 @@ const tab = ref(route.query.tab ?? 'details')
 
 async function load() {
     loading.value = true
-    const { data } = await axios.get(`/api/visitors/${route.params.id}`)
-    visitor.value = data
+
+    const { data, error, status } = await useApi('get', `/api/visitors/${route.params.id}`)
+
+    if (error) {
+        catchError('Ocurrió un error al intentar obtener los datos del asistente.', error)
+    } else {
+        visitor.value = data
+    }
+
     loading.value = false
 }
 
@@ -29,17 +37,6 @@ onMounted(() => {
     echo.channel('visitors')
         .listenToAll((e: any) => {
             console.log('Evento recibido:', e)
-        })
-        .listen('.visitors.created', (e: any) => {
-            load()
-        })
-        .listen('.visitors.updated', (e: any) => {
-            load()
-        })
-        .listen('.visitors.deleted', (e: any) => {
-            load()
-        })
-        .listen('.visitors.headphones.changed', (e: any) => {
             load()
         })
 

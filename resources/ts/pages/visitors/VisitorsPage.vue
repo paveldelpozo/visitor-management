@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { ref, onMounted, watch } from 'vue'
-import axios from '@/axios'
 import { useRouter } from 'vue-router'
-import type {Visitor} from "@/types/visitor";
-import {echo} from "@/echo";
+import type { Visitor } from "@/types/visitor";
+import { echo } from "@/echo";
+import { useApi } from "@/composables/useApi";
+import { catchError } from "@/lib/catchErrors";
 
 const visitors = ref<Visitor[]>([])
 const total = ref(0)
@@ -27,21 +28,23 @@ const headers = [
 
 async function fetchVisitors() {
     loading.value = true
-    try {
-        const { data } = await axios.get('/api/visitors', {
-            params: {
-                search: search.value,
-                page: page.value,
-                size: perPage.value,
-            },
-        })
+
+    const params: any = {
+        search: search.value,
+        page: page.value,
+        size: perPage.value,
+    }
+
+    const { data, error, status } = await useApi('get', '/api/visitors', params)
+
+    if (error) {
+        catchError('Ocurrió un error al intentar obtener los asistentes.', error)
+    } else {
         visitors.value = data.data
         total.value = data.total
-    } catch (error) {
-        console.error('Error cargando asistentes:', error)
-    } finally {
-        loading.value = false
     }
+
+    loading.value = false
 }
 
 function editVisitor(visitor: any) {
@@ -54,10 +57,10 @@ const errorDeleting = ref<string | null>(null)
 const updateVisitor = async (visitor: Visitor, delta: number) => {
     visitor.headphones += delta
 
-    try {
-        await axios.put(`/api/visitors/${visitor.id}`,  visitor)
-    } catch (error) {
-        console.error('Error al actualizar el asistente:', error)
+    const { data, error, status } = await useApi('put', `/api/visitors/${visitor.id}`, visitor)
+
+    if (error) {
+        catchError('Ocurrió un error al intentar actualizar el asistente.', error)
         visitor.headphones -= delta
     }
 }
@@ -66,14 +69,13 @@ const removeVisitor = async (visitor: Visitor, isActive: any) => {
     deleting.value = true
     errorDeleting.value = null
 
-    try {
-        const response = await axios.delete(`/api/visitors/${visitor.id}`)
-        if (response.status === 200) {
-            isActive.value = false
-        }
-    } catch (error) {
-        errorDeleting.value = 'Error al eliminar el asistente. Por favor, inténtalo de nuevo más tarde.'
-        console.error('Error al eliminar el asistente:', error)
+    const { data, error, status } = await useApi('delete', `/api/visitors/${visitor.id}`)
+
+    if (error || status !== 200) {
+        errorDeleting.value = 'Ocurrió un error al intentar eliminar el asistente. Por favor, inténtalo de nuevo más tarde.'
+        catchError('Ocurrió un error al intentar eliminar el asistente.', error)
+    } else {
+        isActive.value = false
     }
 
     deleting.value = false

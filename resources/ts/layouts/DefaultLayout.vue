@@ -1,15 +1,20 @@
 <script setup lang="ts">
-import RealtimeVisitorNotifier from '@/components/notifications/RealtimeVisitorNotifier.vue'
+import { storeToRefs } from "pinia";
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { usePersistentTheme } from '@/composables/useTheme'
+import RealtimeVisitorNotifier from '@/components/notifications/RealtimeVisitorNotifier.vue'
+import AppDrawer from "@/layouts/components/ui/AppDrawer.vue";
+import AppHeader from "@/layouts/components/ui/AppHeader.vue";
+import vuetify from "@/plugins/vuetify";
 import { useAuthStore } from '@/store/auth'
-import { storeToRefs } from "pinia";
 
+const { isDark, toggleTheme } = usePersistentTheme()
 const { user } = storeToRefs(useAuthStore())
 
 const auth = useAuthStore()
 const router = useRouter()
-const drawer = ref(false)
+const drawer = ref(!vuetify.display.mobile)
 const snackbar = ref(false)
 const message = ref('')
 
@@ -27,38 +32,16 @@ async function logout() {
 
 <template>
     <v-app>
-        <v-navigation-drawer v-if="user" v-model="drawer" app temporary>
-            <v-list>
-                <v-list-item link :to="{ name: 'home' }">
-                    <template #prepend><v-icon>mdi-home</v-icon></template>
-                    <v-list-item-title>Inicio</v-list-item-title>
-                </v-list-item>
-                <v-list-item :to="{ name: 'visitor.index' }">
-                    <template #prepend><v-icon>mdi-account-multiple</v-icon></template>
-                    <v-list-item-title>Asistentes</v-list-item-title>
-                </v-list-item>
-                <v-list-item link :to="{ name: 'visitor.create' }">
-                    <template #prepend><v-icon>mdi-account-plus</v-icon></template>
-                    <v-list-item-title>Nuevo asistente</v-list-item-title>
-                </v-list-item>
-                <v-list-item link :to="{ name: 'logs' }">
-                    <template #prepend><v-icon>mdi-file-document-outline</v-icon></template>
-                    <v-list-item-title>Registro de acciones</v-list-item-title>
-                </v-list-item>
-            </v-list>
-        </v-navigation-drawer>
+        <AppDrawer v-if="user" v-model:drawer="drawer" />
 
-        <v-app-bar app color="info">
-            <v-app-bar-nav-icon v-if="user" @click="drawer = !drawer" />
-            <v-toolbar-title @click="router.push({ name: 'home' })" style="cursor: pointer" class="d-flex align-center">
-                <VIcon size="small">mdi-umbrella-beach</VIcon>
-                <strong>SEonTheBeach</strong> | Gestión de Auriculares
-            </v-toolbar-title>
-            <v-spacer />
-            <v-btn v-if="user" text icon @click="logout" title="Cerrar sesión">
-                <v-icon>mdi-logout</v-icon>
-            </v-btn>
-        </v-app-bar>
+        <AppHeader
+            v-if="user"
+            :user="user"
+            :is-dark="isDark"
+            @toggle-theme="toggleTheme"
+            @logout="logout"
+            @toggle-drawer="() => drawer = !drawer"
+        />
 
         <v-main>
             <slot />
@@ -67,6 +50,11 @@ async function logout() {
         <v-snackbar v-model="snackbar" color="success" timeout="3000">
             {{ message }}
         </v-snackbar>
+
+        <v-footer app color="blue-darken-2" height="40" class="d-flex justify-center">
+            <small>&copy; {{ new Date().getFullYear() }} Pavel del Pozo – Todos los derechos reservados</small>
+        </v-footer>
+
         <RealtimeVisitorNotifier />
     </v-app>
 </template>

@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import type { Visitor } from '@/types/visitor'
-import axios from '@/axios'
 import {ref} from 'vue'
+import { useApi } from "@/composables/useApi";
+import { catchError } from "@/lib/catchErrors";
 
 defineProps<{ visitors: Visitor[] }>()
 const emit = defineEmits(['select', 'refresh'])
@@ -13,15 +14,16 @@ const removeVisitor = async (visitor: Visitor, isActive: any) => {
     deleting.value = true
     errorDeleting.value = null
 
-    try {
-        const response = await axios.delete(`/api/visitors/${visitor.id}`)
-        if (response.status === 200) {
-            isActive.value = false
-            emit('refresh') // Emitir evento para refrescar la lista de asistentes
-        }
-    } catch (error) {
+    const { data, error, status } = await useApi('delete', `/api/visitors/${visitor.id}`)
+
+    const response = await axios.delete(`/api/visitors/${visitor.id}`)
+
+    if (error || status !== 200) {
         errorDeleting.value = 'Error al eliminar el asistente. Por favor, inténtalo de nuevo más tarde.'
         console.error('Error al eliminar el asistente:', error)
+    } else {
+        isActive.value = false
+        emit('refresh')
     }
 
     deleting.value = false

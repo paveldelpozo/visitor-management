@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import axios from '@/axios'
 import type { VisitorLog } from '@/types/visitor'
+import { useApi } from "@/composables/useApi";
+import { catchError } from "@/lib/catchErrors";
 
 const props = defineProps<{ visitorId: number, page?: number, search?: string }>()
 
@@ -14,8 +15,13 @@ const headers = [
 ]
 
 async function loadLogs() {
-    const { data } = await axios.get(`/api/visitors/${props.visitorId}/logs?search=${props.search}&page=${props.page}`)
-    logs.value = data.data
+    const { data, error, status } = await useApi('get', `/api/visitors/${props.visitorId}/logs?search=${props.search}&page=${props.page}`)
+
+    if (error) {
+        catchError('Ocurrió un error al intentar obtener los registros del asistente.', error)
+    } else {
+        logs.value = data.data
+    }
 }
 
 onMounted(loadLogs)

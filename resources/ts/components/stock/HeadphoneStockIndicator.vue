@@ -1,16 +1,24 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import axios from '@/axios'
 import type { HeadphoneStock } from '@/types/visitor'
+import { useApi } from "@/composables/useApi";
+import { catchError } from "@/lib/catchErrors";
 
 const stock = ref<HeadphoneStock>()
 
 async function loadStock() {
-    const { data } = await axios.get('/api/stock')
-    stock.value = data
+    const { data, error, status } = await useApi('get', '/api/stock')
+
+    if (error) {
+        catchError('Ocurrió un error al intentar obtener el stock de auriculares.', error)
+    } else {
+        stock.value = data
+    }
 }
 
 onMounted(loadStock)
+
+defineExpose({ loadStock })
 </script>
 
 <template>

@@ -1,53 +1,64 @@
 import { defineStore } from 'pinia'
-import axios from '@/axios'
+import { ref } from 'vue'
+import { useApi } from '@/composables/useApi'
 
-export const useAuthStore = defineStore('auth', {
-  state: () => ({
-    user: null as null | Record<string, any>,
-    loading: false,
-    error: '',
-    fatal: false,
-  }),
+export const useAuthStore = defineStore('auth', () => {
+    const user = ref<Record<string, any> | null>(null)
+    const loading = ref(false)
+    const error = ref('')
+    const fatal = ref(false)
 
-  actions: {
-    async fetchUser() {
-      this.loading = true
-      try {
-        const response = await axios.get('/api/user')
-        this.user = response.data
-        this.error = ''
-        this.fatal = false
-      } catch (err: any) {
-        this.user = null
-        this.error = err.response?.data?.message || 'No autenticado'
-        this.fatal = true
-      } finally {
-        this.loading = false
-      }
-    },
+    const fetchUser = async () => {
+        loading.value = true
+        const { data, error: err } = await useApi('get', '/api/user')
 
-    async login(email: string, password: string) {
-      this.loading = true
-      try {
-        await axios.get('/sanctum/csrf-cookie', { withCredentials: true })
-        const response = await axios.post('/api/login', { email, password }, { withCredentials: true })
-        this.user = response.data
-        this.error = ''
-        this.fatal = false
-        localStorage.setItem('auth_token', response.data.token)
-      } catch (err: any) {
-        this.error = err.response?.data?.message || 'Error de login'
-        this.fatal = false
-        throw err
-      } finally {
-        this.loading = false
-      }
-    },
+        if (data) {
+            user.value = data
+            error.value = ''
+            fatal.value = false
+        } else {
+            user.value = null
+            error.value = err || 'No autenticado'
+            fatal.value = true
+        }
 
-    async logout() {
-      await axios.post('/api/logout')
-      localStorage.removeItem('auth_token')
-      this.user = null
-    },
-  }
+        loading.value = false
+    }
+
+    const login = async (email: string, password: string) => {
+        loading.value = true
+        error.value = ''
+        fatal.value = false
+
+        try {
+            await useApi('get', '/sanctum/csrf-cookie')
+            const { data, error: err } = await useApi('post', '/api/login', { email, password })
+
+            if (data) {
+                user.value = data
+                localStorage.setItem('auth_token', data.token)
+            } else {
+                error.value = err || 'Error de login'
+                throw new Error(error.value)
+            }
+        } finally {
+            loading.value = false
+        }
+    }
+
+    const logout = async () => {
+        await useApi('post', '/api/logout')
+        localStorage.removeItem('auth_token')
+        user.value = null
+    }
+
+    return {
+        user,
+        loading,
+        error,
+        fatal,
+        fetchUser,
+        login,
+        logout,
+    }
 })
