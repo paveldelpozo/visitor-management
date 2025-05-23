@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import axios from 'axios'
+import axios from '@/axios'
 import type { VisitorLog } from '@/types/visitor'
 
 const props = defineProps<{ visitorId: number, page?: number, search?: string }>()

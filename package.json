@@ -6,8 +6,10 @@
     "scripts": {
         "build": "vite build",
         "dev": "vite",
-        "serve": "php artisan serve",
-        "vite": "vite",
+        "dev:vite": "vite",
+        "local-ip": "ip a | grep 'inet '",
+        "serve": "php artisan serve --host=0.0.0.0 --port=8000",
+        "vite": "vite --host=0.0.0.0 --port=5173",
         "dev:full": "npm-run-all --parallel serve vite reverb",
         "reverb": "php artisan reverb:start --host=0.0.0.0 --port=6001",
         "test": "vitest run",

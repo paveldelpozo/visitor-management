@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { Visitor } from '@/types/visitor'
-import axios from 'axios'
+import axios from '@/axios'
 import {ref} from 'vue'
 
 defineProps<{ visitors: Visitor[] }>()

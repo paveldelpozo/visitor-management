@@ -34,7 +34,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import axios from 'axios'
+import axios from '@/axios'
 
 const logs = ref<any[]>([])
 const loading = ref(false)

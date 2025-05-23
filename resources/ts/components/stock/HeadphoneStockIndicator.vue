@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import axios from 'axios'
+import axios from '@/axios'
 import type { HeadphoneStock } from '@/types/visitor'
 
 const stock = ref<HeadphoneStock>()

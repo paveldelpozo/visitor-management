@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, watch } from 'vue'
-import axios from 'axios'
+import axios from '@/axios'
 import { useRouter } from 'vue-router'
 import type {Visitor} from "@/types/visitor";
 import {echo} from "@/echo";

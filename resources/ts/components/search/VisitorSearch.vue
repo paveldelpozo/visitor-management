@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {onMounted, ref, watch} from 'vue'
-import axios from 'axios'
+import axios from '@/axios'
 
 const form = ref({
     search: '',

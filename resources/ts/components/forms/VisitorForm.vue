@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 import type { Visitor } from '@/types/visitor'
-import axios from 'axios'
+import axios from '@/axios'
 import { useRouter } from 'vue-router'
 
 const props = defineProps<{

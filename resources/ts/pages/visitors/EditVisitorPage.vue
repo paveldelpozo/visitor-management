@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {onMounted, ref, watch} from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import axios from 'axios'
+import axios from '@/axios'
 import type { Visitor } from '@/types/visitor'
 import VisitorForm from '@/components/forms/VisitorForm.vue'
 import VisitorLogTable from '@/components/logs/VisitorLogTable.vue'
