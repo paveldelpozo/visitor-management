@@ -12,9 +12,9 @@ const routes: RouteRecordRaw[] = [
     { path: '/visitors', name: 'visitor.index', component: () => import('@/pages/visitors/VisitorsPage.vue'), meta: { requiresAuth: true } },
     { path: '/visitors/create', name: 'visitor.create', component: CreateVisitorPage, meta: { requiresAuth: true } },
     { path: '/visitors/:id', name: 'visitor.edit', component: EditVisitorPage, props: true, meta: { requiresAuth: true } },
-    { path: '/logs', name: 'logs', component: LogsPage, meta: { requiresAuth: true } },
+    { path: '/logs', name: 'logs', component: LogsPage, meta: { requiresAuth: true, requiresAdmin: true } },
     { path: '/login', name: 'login', component: () => import('@/pages/LoginPage.vue') },
-    { path: '/users', name: 'users.index', component: UsersPage },
+    { path: '/users', name: 'users.index', component: UsersPage, meta: { requiresAuth: true, requiresAdmin: true } },
     { path: '/error', name: 'error', component: () => import('@/components/ui/ErrorScreen.vue') },
     { path: '/:pathMatch(.*)*', name: 'not-found', component: () => import('@/pages/NotFoundPage.vue') }
 ]
@@ -39,8 +39,8 @@ router.beforeEach(async (to, from, next) => {
 
     if (auth.fatal) return next({ name: 'error' })
     if (to.meta.requiresAuth && !auth.user) return next({ name: 'login' })
-    if (to.meta.requiresAdmin && auth.user?.role !== 'admin') return next({ name: 'search' })
-    if (to.name === 'login' && auth.user) return next({ name: 'search' })
+    if (to.meta.requiresAdmin && auth.user?.roles?.[0]?.name !== 'admin') return next({ name: 'home' })
+    if (to.name === 'login' && auth.user) return next({ name: 'home' })
 
     next()
 })

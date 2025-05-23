@@ -39,7 +39,7 @@ onMounted(() => {
 
 <template>
     <v-container fluid class="text-center">
-        <div class="d-flex justify-center">
+        <div class="d-flex justify-center mb-4">
             <v-img src="/img/seonthebeach_logo.png" max-width="30%" min-width="320"></v-img>
         </div>
 

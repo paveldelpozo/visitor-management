@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 
 //Route::middleware('guest')->post('/login', function (Request $request) {
 //    $credentials = $request->validate([
@@ -28,7 +29,7 @@ Route::post('/login', function (Request $request) {
         'password' => ['required'],
     ]);
 
-    $user = User::where('email', $credentials['email'])->first();
+    $user = User::where('email', $credentials['email'])->with('roles')->first();
 
     if (! $user || ! Hash::check($credentials['password'], $user->password)) {
         return response()->json(['message' => 'Invalid credentials'], 401);
@@ -46,7 +47,7 @@ Route::middleware('auth:sanctum')->post('/logout', function (Request $request) {
 });
 
 Route::get('/user', function (Request $request) {
-    return $request->user();
+    return Auth::user()->load('roles');
 })->middleware('auth:sanctum');
 
 Route::middleware('auth:sanctum')->prefix('visitors')->group(function () {
@@ -61,8 +62,8 @@ Route::middleware('auth:sanctum')->prefix('visitors')->group(function () {
 });
 
 Route::middleware('auth:sanctum')->prefix('stock')->group(function () {
-    Route::get('/stock', [HeadphoneStockController::class, 'show']); //->middleware('role:admin');
-    Route::put('/stock', [HeadphoneStockController::class, 'update']); //->middleware('role:admin');
+    Route::get('/stock', [HeadphoneStockController::class, 'show'])->middleware('role:admin');
+    Route::put('/stock', [HeadphoneStockController::class, 'update'])->middleware('role:admin');
 });
 
 Route::middleware('auth:sanctum')->group(function () {
@@ -70,7 +71,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/log-client-error', [ClientLogController::class, 'store']);
 });
 
-Route::middleware('auth:sanctum')->prefix('users')->group(function () {
+Route::middleware(['auth:sanctum', 'role:admin'])->prefix('users')->group(function () {
     Route::get('/', [UserController::class, 'index']); //->middleware('role:admin');
     Route::post('/', [UserController::class, 'store']); //->middleware('role:admin');
     Route::get('{user}', [UserController::class, 'show']); //->middleware('role:admin');

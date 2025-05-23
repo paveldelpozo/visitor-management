@@ -21,7 +21,7 @@ async function submitLogin() {
 
 <template>
     <v-container>
-        <div class="d-flex justify-center">
+        <div class="d-flex justify-center mb-4">
             <v-img src="/img/seonthebeach_logo.png" max-width="50%" min-width="320"></v-img>
         </div>
 
