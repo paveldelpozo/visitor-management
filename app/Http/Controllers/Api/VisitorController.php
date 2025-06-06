@@ -24,7 +24,7 @@ class VisitorController extends Controller
         $request->get('search') && $query->search($request->get('search'));
 
         return response()->json(
-            $query->orderBy('created_at', 'desc')->paginate($request->get('size', 25))
+            $query->orderBy('created_at', 'desc')->paginate($request->get('size', 10))
         );
     }
 

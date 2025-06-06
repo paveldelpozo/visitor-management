@@ -11,7 +11,7 @@ const visitors = ref<Visitor[]>([])
 const total = ref(0)
 const loading = ref(true)
 const page = ref(1)
-const perPage = ref(25)
+const perPage = ref(10)
 const search = ref('')
 const router = useRouter()
 
@@ -27,13 +27,14 @@ const headers = [
     { title: 'Acciones', value: 'actions', nowrap: true, sortable: false },
 ]
 
-async function fetchVisitors() {
+async function fetchVisitors({ page: tablePage, itemsPerPage, sortBy }) {
+    console.log('Fetching visitors with params:', { page, itemsPerPage, sortBy })
     loading.value = true
 
     const params: any = {
-        search: search.value,
-        page: page.value,
-        size: perPage.value,
+        search: search.value ?? '',
+        page: tablePage, //page.value,
+        size: itemsPerPage, //perPage.value,
     }
 
     const query = new URLSearchParams(params).toString()
@@ -46,7 +47,7 @@ async function fetchVisitors() {
         visitors.value = data.data
         total.value = data.total
     }
-
+    console.log('Fetching visitors with params:', visitors.value, total.value)
     loading.value = false
 }
 
@@ -84,12 +85,12 @@ const removeVisitor = async (visitor: Visitor, isActive: any) => {
     deleting.value = false
 }
 
-watch(search, fetchVisitors)
-watch(page, fetchVisitors)
-watch(perPage, fetchVisitors)
+// watch(search, fetchVisitors)
+// watch(page, fetchVisitors)
+// watch(perPage, fetchVisitors)
 
 onMounted(() => {
-    fetchVisitors()
+    //fetchVisitors()
     echo.channel('visitors')
         .listenToAll((e: any) => {
             console.log('Evento recibido:', e)
@@ -123,8 +124,9 @@ onMounted(() => {
                         hide-details
                         variant="solo"
                         prepend-inner-icon="mdi-magnify"
-                        @input="fetchVisitors"
-                        @keyup.enter="fetchVisitors"
+                        @input="() => fetchVisitors({ page, itemsPerPage: perPage, sortBy: '' })"
+                        @keyup.enter="() => fetchVisitors({ page, itemsPerPage: perPage, sortBy: '' })"
+                        @click:clear="() => fetchVisitors({ page, itemsPerPage: perPage, sortBy: '' })"
                         class="mb-4"
                         clearable
                     />
@@ -135,16 +137,18 @@ onMounted(() => {
                     </v-btn>
                 </div>
 
-                <v-data-table
+                <v-data-table-server
                     :headers="headers"
                     :items="visitors"
-                    :items-per-page="perPage"
+                    v-model:items-per-page="perPage"
+                    v-model:page="page"
                     :loading="loading"
+                    :items-length="total"
                     :server-items-length="total"
-                    :page.sync="page"
                     class="elevation-1 rounded"
-                    @update:page="fetchVisitors"
+                    @update:options="fetchVisitors"
                 >
+                    <!-- @update:page="fetchVisitors" -->
                     <template #item.headphones="{ item }">
                         <div class="text-center">
                             <v-btn icon color="info" size="x-small" class="mr-2" @click.stop="updateVisitor(item, -1)">
@@ -214,7 +218,7 @@ onMounted(() => {
                             </template>
                         </v-dialog>
                     </template>
-                </v-data-table>
+                </v-data-table-server>
             </v-col>
         </v-row>
     </v-container>

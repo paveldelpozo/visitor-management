@@ -23,7 +23,7 @@ class ClientLogController extends Controller
             $query->whereDate('created_at', $request->date);
         }
 
-        return response()->json($query->latest()->paginate(25));
+        return response()->json($query->latest()->paginate($request->get('size', 10)));
     }
 
     public function store(Request $request): \Illuminate\Http\JsonResponse

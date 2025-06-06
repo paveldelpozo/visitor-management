@@ -9,10 +9,16 @@ const route = useRoute()
 const router = useRouter()
 
 const logs = ref([])
+const total = ref(0)
 const loading = ref(true)
+const page = ref(1)
+const perPage = ref(10)
+
 const filters = ref({
     user: route.query.user || '',
     date: route.query.date || '',
+    page: page.value,
+    size: perPage.value,
 })
 
 const headers = [
@@ -23,8 +29,11 @@ const headers = [
     { title: 'Meta', value: 'meta', nowrap: true },
 ]
 
-const getParams = () => {
+const getParams = ({ tablePage, itemsPerPage, sortBy }) => {
     const params: any = {}
+
+    params.page = tablePage || page.value
+    params.size = itemsPerPage || perPage.value
 
     if (filters.value.user)
         params.user = filters.value.user
@@ -35,10 +44,10 @@ const getParams = () => {
     return params
 }
 
-async function fetchLogs() {
+async function fetchLogs({ page: tablePage, itemsPerPage, sortBy }) {
     loading.value = true
 
-    const queryString = new URLSearchParams(getParams()).toString()
+    const queryString = new URLSearchParams(getParams({ tablePage, itemsPerPage, sortBy })).toString()
 
     const { data, error, status } = await useApi('get', `/api/logs?${queryString}`)
 
@@ -46,6 +55,7 @@ async function fetchLogs() {
         catchError('Ocurrió un error al intentar obtener los registros.', error)
     } else {
         logs.value = data.data
+        total.value = data.total
     }
 
     loading.value = false
@@ -55,11 +65,11 @@ function formatMeta(meta: any) {
     return JSON.stringify(meta, null, 2)
 }
 
-watch(filters, () => {
-    router.push({ query: getParams() })
-}, { deep: true })
+// watch(filters, () => {
+//     router.push({ query: getParams({ tablePage: page.value, itemsPerPage: perPage.value, sortBy: [] }) })
+// }, { deep: true })
 
-onMounted(fetchLogs)
+//onMounted(fetchLogs)
 </script>
 
 <template>
@@ -77,8 +87,9 @@ onMounted(fetchLogs)
                             hide-details
                             clearable
                             prepend-inner-icon="mdi-account"
-                            @keyup.enter="fetchLogs"
-                            @click:clear="fetchLogs"
+                            @input="() => fetchLogs({ page, itemsPerPage: perPage, sortBy: '' })"
+                            @keyup.enter="() => fetchLogs({ page, itemsPerPage: perPage, sortBy: '' })"
+                            @click:clear="() => fetchLogs({ page, itemsPerPage: perPage, sortBy: '' })"
                         />
                     </v-col>
                     <v-col cols="12" md="5">
@@ -89,24 +100,35 @@ onMounted(fetchLogs)
                             hide-details
                             clearable
                             prepend-inner-icon="mdi-calendar"
-                            @keyup.enter="fetchLogs"
-                            @click:clear="fetchLogs"
+                            @input="() => fetchLogs({ page, itemsPerPage: perPage, sortBy: '' })"
+                            @keyup.enter="() => fetchLogs({ page, itemsPerPage: perPage, sortBy: '' })"
+                            @click:clear="() => fetchLogs({ page, itemsPerPage: perPage, sortBy: '' })"
                         />
                     </v-col>
                     <v-col cols="12" md="2">
-                        <v-btn @click="fetchLogs" block color="info" class="mt-2" size="large">
+                        <v-btn
+                            @click="() => fetchLogs({ page, itemsPerPage: perPage, sortBy: '' })"
+                            block
+                            color="info"
+                            class="mt-2"
+                            size="large"
+                        >
                             <v-icon>mdi-filter</v-icon>
                             Aplicar filtros
                         </v-btn>
                     </v-col>
                 </v-row>
 
-                <v-data-table
+                <v-data-table-server
                     :headers="headers"
                     :items="logs"
-                    :items-per-page="25"
+                    v-model:items-per-page="perPage"
+                    v-model:page="page"
                     :loading="loading"
+                    :items-length="total"
+                    :server-items-length="total"
                     class="elevation-1"
+                    @update:options="fetchLogs"
                     @click:row="(event: any, item: any) => router.push({ name: 'visitor.edit', params: { id: item.visitor.id } })"
                 >
                     <template #item.user="{ item }">
@@ -121,7 +143,7 @@ onMounted(fetchLogs)
                     <template #item.meta="{ item }">
                         <pre>{{ formatMeta(item.meta) }}</pre>
                     </template>
-                </v-data-table>
+                </v-data-table-server>
             </v-col>
         </v-row>
     </v-container>
