@@ -29,12 +29,18 @@ async function submitLogin() {
         <HeaderTitle text="Iniciar sessión" />
 
         <v-form @submit.prevent="submitLogin">
-            <v-text-field autocomplete="email" variant="solo" v-model="email" placeholder="Email" hide-details type="email" inputmode="email" />
-            <v-text-field autocomplete="password" variant="solo" v-model="password" placeholder="Contraseña" :type="type">
-                <template #append-inner>
-                    <v-icon @click="type = (type === 'password' ? 'text' : 'password')">{{ type === 'password' ? 'mdi-eye' : 'mdi-eye-off' }}</v-icon>
-                </template>
-            </v-text-field>
+            <v-row>
+                <v-col cols="12">
+                    <v-text-field autocomplete="email" variant="solo" v-model="email" placeholder="Email" hide-details type="email" inputmode="email" />
+                </v-col>
+                <v-col cols="12">
+                    <v-text-field autocomplete="password" variant="solo" v-model="password" placeholder="Contraseña" :type="type">
+                        <template #append-inner>
+                            <v-icon @click="type = (type === 'password' ? 'text' : 'password')">{{ type === 'password' ? 'mdi-eye' : 'mdi-eye-off' }}</v-icon>
+                        </template>
+                    </v-text-field>
+                </v-col>
+            </v-row>
             <v-btn block size="large" type="submit" color="info" :loading="auth.loading">Entrar</v-btn>
             <v-alert v-if="auth.error" type="error" class="mt-4">{{ auth.error }}</v-alert>
         </v-form>

@@ -24,7 +24,11 @@ class VisitorController extends Controller
         $request->get('search') && $query->search($request->get('search'));
 
         return response()->json(
-            $query->orderBy('created_at', 'desc')->paginate($request->get('size', 10))
+            $query
+                ->orderBy('headphones', 'desc')
+                ->orderBy('name', 'asc')
+                ->orderBy('surname', 'asc')
+                ->paginate($request->get('size', 10))
         );
     }
 
@@ -38,7 +42,10 @@ class VisitorController extends Controller
 //            $query->{"search" . ucfirst($field)}($value);
 //        }
 
-        $results = $query;
+        $results = $query
+            ->orderBy('headphones', 'desc')
+            ->orderBy('name', 'asc')
+            ->orderBy('surname', 'asc');
 
         if ($results->get()->count() === 0) {
             return response()->json(['status' => 'not_found']);
@@ -53,7 +60,7 @@ class VisitorController extends Controller
 
         return response()->json([
             'status' => 'multiple',
-            'visitors' => $results->orderBy('updated_at', 'desc')->limit(10)->get()
+            'visitors' => $results->orderBy('updated_at', 'desc')->limit(14)->get()
         ]);
     }
 

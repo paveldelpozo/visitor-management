@@ -8,6 +8,7 @@ defineProps<{ visitors: Visitor[] }>()
 const emit = defineEmits(['select', 'refresh'])
 
 const updateVisitor = async (visitor: Visitor, delta: number) => {
+//    console.log(visitor, delta)
     visitor.headphones += delta
 
     const { data, error, status } = await useApi('put', `/api/visitors/${visitor.id}`, visitor)
