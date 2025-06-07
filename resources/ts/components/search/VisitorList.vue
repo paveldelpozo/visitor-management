@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import type { Visitor } from '@/types/visitor'
 import {ref} from 'vue'
+import { useRouter } from 'vue-router'
 import { useApi } from "@/composables/useApi";
 import { catchError } from "@/lib/catchErrors";
 
 defineProps<{ visitors: Visitor[] }>()
 const emit = defineEmits(['select', 'refresh'])
+
+const router = useRouter()
 
 const updateVisitor = async (visitor: Visitor, delta: number) => {
 //    console.log(visitor, delta)
@@ -54,6 +57,12 @@ const updateVisitor = async (visitor: Visitor, delta: number) => {
                 </v-list-item>
             </template>
         </v-list>
+        <v-divider v-if="visitors.length > 0" />
+        <div class="pa-2 text-center">
+            <v-btn variant="text" block :to="{ name: 'visitor.index' }" class="text-decoration-none text-info">
+                Ver todos los asistentes
+            </v-btn>
+        </div>
     </div>
 </template>
 

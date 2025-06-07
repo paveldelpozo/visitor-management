@@ -25,7 +25,7 @@ class VisitorController extends Controller
 
         return response()->json(
             $query
-                ->orderBy('headphones', 'desc')
+//                ->orderBy('headphones', 'desc')
                 ->orderBy('name', 'asc')
                 ->orderBy('surname', 'asc')
                 ->paginate($request->get('size', 10))
@@ -43,7 +43,7 @@ class VisitorController extends Controller
 //        }
 
         $results = $query
-            ->orderBy('headphones', 'desc')
+//            ->orderBy('headphones', 'desc')
             ->orderBy('name', 'asc')
             ->orderBy('surname', 'asc');
 
