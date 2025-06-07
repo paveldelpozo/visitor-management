@@ -54,7 +54,7 @@ async function logout() {
             {{ message }}
         </v-snackbar>
 
-        <v-footer app color="blue-darken-2" height="40" class="d-flex justify-center">
+        <v-footer app color="blue-darken-2" height="52" class="d-flex pb-6 pb-md-4 justify-center">
             <small>&copy; {{ new Date().getFullYear() }} Pavel del Pozo – Todos los derechos reservados</small>
         </v-footer>
 

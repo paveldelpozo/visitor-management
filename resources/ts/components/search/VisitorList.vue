@@ -80,7 +80,7 @@ const updateVisitor = async (visitor: Visitor, delta: number) => {
 }
 @media (max-width: 600px) {
     .scrollable-container {
-        max-height: 40dvh;
+        max-height: 46dvh;
     }
 }
 
