@@ -33,11 +33,11 @@ const updateVisitor = async (visitor: Visitor, delta: number) => {
                     <template #prepend>
                         <v-icon size="36" icon="mdi-account" />
                     </template>
-                    <v-list-item-title>{{ v.name }} {{ v.surname }}</v-list-item-title>
+                    <v-list-item-title>{{ v.name }} {{ v.surname }} <span v-if="v.company" class="text-grey">({{ v.company }})</span></v-list-item-title>
                     <v-list-item-subtitle>
-                        <a class="text-decoration-none font-weight-bold text-info" :href="`tel:${v.phone}`" v-if="v.phone">{{ v.phone }}</a>
+                        <a v-if="v.phone" :href="`tel:${v.phone}`" class="font-weight-bold text-info">{{ v.phone }}</a>
                         <span v-if="v.phone && v.email"> / </span>
-                        <span v-if="v.email">{{ v.email }}</span>
+                        <a :href="`mailto:${v.email}`" class="font-weight-bold text-grey">{{ v.email }}</a>
                     </v-list-item-subtitle>
                     <template #append>
                         <v-btn icon color="info" size="x-small" class="mr-2" @click.stop="updateVisitor(v, -1)">

@@ -14,9 +14,13 @@ const loading = ref(false)
 async function search() {
     loading.value = true
 
-    const query = new URLSearchParams(form.value).toString()
+    if (!form.value.search) {
+        form.value.search = ''
+    }
 
-    const { data, error, status } = await useApi('get', `/api/visitors/search?${query}`)
+    const query = new URLSearchParams(form.value)
+
+    const { data, error, status } = await useApi('get', `/api/visitors/search?${query.toString()}`)
 
     if (error) {
         catchError('Ocurrió un error al intentar buscar asistentes.', error)

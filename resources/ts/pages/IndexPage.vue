@@ -15,11 +15,16 @@ const visitors = ref<Visitor[]>([])
 const router = useRouter()
 
 function handleResults(result: any) {
-    if (result.status === 'single') {
-        router.push({ name: 'visitor.edit', params: { id: result.visitor.id } })
-    } else if (result.status === 'multiple') {
-        visitors.value = result.visitors
-    } else {
+    // if (result.status === 'single') {
+    //     router.push({ name: 'visitor.edit', params: { id: result.visitor.id } })
+    // } else if (result.status === 'multiple') {
+    //     visitors.value = result.visitors
+    // } else {
+    //     router.push({ name: 'visitor.create' })
+    // }
+    visitors.value = result.visitors ?? [result.visitor] ?? []
+
+    if (!['single', 'multiple'].includes(result.status)) {
         router.push({ name: 'visitor.create' })
     }
 }
@@ -46,10 +51,14 @@ onMounted(() => {
 
         <HeaderTitle text="Gestión de Auriculares"/>
 
-        <VisitorSearch ref="visitorSearchRef" @results="handleResults" @loading="(value) => loading = value" />
+        <VisitorSearch
+            ref="visitorSearchRef"
+            @results="handleResults"
+            @loading="(value) => loading = value"
+        />
 
         <VisitorList
-            v-if="visitors.length > 1 && !loading"
+            v-if="visitors.length >= 1 && !loading"
             :visitors="visitors"
             @select="goToEdit"
             @refresh="visitorSearchRef?.search()"
