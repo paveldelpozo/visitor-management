@@ -49,7 +49,7 @@ onMounted(() => {
             <v-img src="/img/seonthebeach_logo.png" max-width="25%" min-width="320"></v-img>
         </div>
 
-        <HeaderTitle text="Gestión de Auriculares"/>
+<!--        <HeaderTitle text="Gestión de Auriculares"/>-->
 
         <VisitorSearch
             ref="visitorSearchRef"
