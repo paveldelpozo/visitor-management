@@ -56,6 +56,48 @@ const updateVisitor = async (visitor: Visitor, delta: number) => {
                             <VIcon class="mr-2">mdi-headphones</VIcon>
                             <span>{{ v.headphones }}</span>
 
+<!--                            <v-dialog max-width="400">-->
+<!--                                <template v-slot:activator="{ props: activatorProps }">-->
+<!--                                    <v-btn variant="text" v-bind="activatorProps">-->
+<!--                                        <VIcon class="mr-2">mdi-headphones</VIcon>-->
+<!--                                        <span>{{ v.headphones }}</span>-->
+<!--                                    </v-btn>-->
+<!--                                </template>-->
+<!--                                -->
+
+<!--                                <template v-slot:default="{ isActive }">-->
+<!--                                    <v-card>-->
+<!--                                        <v-card-title>-->
+<!--                                            Auriculares de {{ v.name }} {{ v.surname }}:-->
+<!--                                        </v-card-title>-->
+<!--                                        <v-divider></v-divider>-->
+<!--                                        <v-card-text class="d-flex align-center justify-space-between">-->
+<!--                                            <v-btn icon color="info" class="mx-2" @click.stop="updateVisitor(v, -1)">-->
+<!--                                                <v-icon>mdi-minus</v-icon>-->
+<!--                                            </v-btn>-->
+
+<!--                                            <span class="text-h5">-->
+<!--                                                <VIcon class="mr-2">mdi-headphones</VIcon>-->
+<!--                                                <span>{{ v.headphones }}</span>-->
+<!--                                            </span>-->
+
+<!--                                            <v-btn icon color="info" class=mx-2 @click.stop="updateVisitor(v, 1)">-->
+<!--                                                <v-icon>mdi-plus</v-icon>-->
+<!--                                            </v-btn>-->
+<!--                                        </v-card-text>-->
+<!--                                        <v-divider></v-divider>-->
+<!--                                        <v-card-actions>-->
+<!--                                            <v-spacer></v-spacer>-->
+
+<!--                                            <v-btn-->
+<!--                                                text="Cerrar"-->
+<!--                                                @click="isActive.value = false"-->
+<!--                                            ></v-btn>-->
+<!--                                        </v-card-actions>-->
+<!--                                    </v-card>-->
+<!--                                </template>-->
+<!--                            </v-dialog>-->
+
                             <v-btn icon color="info" size="x-small" class=mx-2 @click.stop="updateVisitor(v, 1)">
                                 <v-icon>mdi-plus</v-icon>
                             </v-btn>
