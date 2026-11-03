@@ -1,3 +1,4 @@
+import fs from 'fs'
 import os from 'os'
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -69,6 +70,10 @@ export default defineConfig({
         host: '0.0.0.0',
         port: 5173,
         strictPort: true,
+        // https: {
+        //     key: fs.readFileSync(path.resolve(__dirname, 'certs/headphones-key.pem')),
+        //     cert: fs.readFileSync(path.resolve(__dirname, 'certs/headphones.pem')),
+        // },
         origin: `http://${lanIP}:5173`,
     },
     resolve: {

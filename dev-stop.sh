@@ -21,6 +21,8 @@ for port in 8000 5173 6001; do
   fi
 done
 
+rm -rf "$(pwd)/certs/*.pem"|| echo "⚠️  No se pudo eliminar los certificados (¿están en uso?)"
+
 echo ""
 echo "🔓 Reactivando la aplicación (php artisan up)..."
 php artisan up || echo "⚠️  No se pudo reactivar Laravel (verifica estado manualmente)"
